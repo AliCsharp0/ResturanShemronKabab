@@ -1,0 +1,50 @@
+﻿@{
+	Layout = null;
+}
+@model IEnumerable<Restaurant.DomainModel.ApplicationModel.Beverages.BeveragesListItem>
+<table class="table table-bordered table-hover table-striped ">
+	<thead>
+		<tr>
+			<th>Beverages ID</th>
+
+			<th>Category Name</th>
+
+			<th>Beverages Name</th>
+
+			<th>Unit Price</th>
+
+			<th>Image</th>
+
+			<th>Delete</th>
+
+			<th>Update</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var item in Model)
+		{
+			<tr id="tr-@item.BeveragesID">
+
+				<td>@Html.DisplayFor(modelItem => item.BeveragesID)</td>
+
+				<td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+
+				<td>@Html.DisplayFor(modelItem => item.BeveragesName)</td>
+
+				<td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+
+				<td>@Html.DisplayFor(modelItem => item.Image)</td>
+
+				<td>
+					<span class="btn btn-danger btn-sm btn-Remove" data-controller="BeveragesManagement" data-action="Remove" data-id="@item.BeveragesID">Delete</span>
+				</td>
+				<td>
+					<span class="btn btn-success btn-sm btn-update" data-controller="BeveragesManagement" data-action="Update" data-id="@item.BeveragesID">Update</span>
+				</td>
+				
+			</tr>
+		}
+
+	</tbody>
+</table>

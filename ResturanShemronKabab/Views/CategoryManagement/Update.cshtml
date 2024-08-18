@@ -1,0 +1,45 @@
+﻿@model Restaurant.DomainModel.ApplicationModel.Category.CategoryAddAndEditModel
+@{
+	Layout =null;
+}
+<h4>Edit And Update Category</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update" id="frmUpdateCategory">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+
+                <input type="hidden" asp-for="CategoryID" class="form-control" />
+
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryName" class="control-label"></label>
+                <input asp-for="CategoryName" class="form-control" />
+                <span asp-validation-for="CategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SmallDescription" class="control-label"></label>
+                <input asp-for="SmallDescription" class="form-control" />
+                <span asp-validation-for="SmallDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Slug" class="control-label"></label>
+                <input asp-for="Slug" class="form-control" />
+                <span asp-validation-for="Slug" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParentID" class="control-label"></label>
+                <input asp-for="ParentID" class="form-control" />
+                <span asp-validation-for="ParentID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span type="submit" class="btn btn-success saveUpdate" data-action="Update" data-controller="CategoryManagement" data-form-id="frmUpdateCategory">Update</span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

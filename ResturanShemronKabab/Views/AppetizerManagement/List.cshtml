@@ -1,0 +1,45 @@
+﻿@{
+	Layout = null;
+}
+@model IEnumerable<Restaurant.DomainModel.ApplicationModel.Appetizer.AppetizerListItem>
+<table class="table table-bordered table-hover table-striped ">
+	<thead>
+		<tr>
+			<th>Appetizer ID</th>
+			<th>Appetizer Name</th>
+			<th>Category Name</th>
+			<th>Unit Price</th>
+			<th>Image</th>
+			<th>Delete</th>
+			<th>Update</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var item in Model)
+		{
+			<tr id="tr-@item.AppetizerID">
+				<td>
+					@Html.DisplayFor(modelItem => item.AppetizerID)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.AppetizerName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CategoryName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.UnitPrice)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Image)
+				</td>
+				<td>
+					<span class="btn btn-danger btn-sm btn-Remove" data-controller="AppetizerManagement" data-action="Remove" data-id="@item.AppetizerID">Delete</span>
+				</td>
+				<td>
+					<span class="btn btn-success btn-sm btn-update" data-controller="AppetizerManagement" data-action="Update" data-id="@item.AppetizerID">Update</span>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

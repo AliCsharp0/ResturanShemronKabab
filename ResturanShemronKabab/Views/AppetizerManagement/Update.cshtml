@@ -1,0 +1,51 @@
+﻿@model Restaurant.DomainModel.ApplicationModel.Appetizer.AppetizerAddAndEditModel
+@{
+	Layout = null;
+	SelectList categoryDropDown = (SelectList)ViewBag.categoryDropDown;
+}
+<h4>Appetizer Edit Model</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update" id="frmUpdateAppetizer">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+
+                <input type="hidden" asp-for="AppetizerID" class="form-control" />
+
+            </div>
+            <div class="form-group">
+                <label for="CategoryID">Category</label>
+                <select asp-items="categoryDropDown" class="form-control" asp-for="CategoryID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="AppetizerName" class="control-label"></label>
+                <input asp-for="AppetizerName" class="form-control" />
+                <span asp-validation-for="AppetizerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UnitPrice" class="control-label"></label>
+                <input asp-for="UnitPrice" class="form-control" />
+                <span asp-validation-for="UnitPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SmallDescription" class="control-label"></label>
+                <input asp-for="SmallDescription" class="form-control" />
+                <span asp-validation-for="SmallDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span type="submit" class="btn btn-success saveUpdate" data-action="Update" data-controller="AppetizerManagement" data-form-id="frmUpdateAppetizer">Update</span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

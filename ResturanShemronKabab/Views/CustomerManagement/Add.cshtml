@@ -1,0 +1,56 @@
+﻿@model Restaurant.DomainModel.ApplicationModel.Customer.CustomerAddAndEditModel
+@{
+	Layout = null;
+}
+<h4>CustomerAddAndEditModel</h4>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <form id="frmAddCustomer">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mobile" class="control-label"></label>
+                <input asp-for="Mobile" class="form-control" />
+                <span asp-validation-for="Mobile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TelHome" class="control-label"></label>
+                <input asp-for="TelHome" class="form-control" />
+                <span asp-validation-for="TelHome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span type="submit" class="btn btn-success saveAdd" data-action="Add" data-controller="CustomerManagement" data-form-id="frmAddCustomer">Add</span>
+            </div>
+        </form>
+    </div>
+</div>

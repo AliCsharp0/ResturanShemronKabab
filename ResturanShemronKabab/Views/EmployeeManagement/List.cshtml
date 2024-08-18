@@ -1,0 +1,158 @@
+﻿@{
+    Layout = null;
+}
+@model IEnumerable<Restaurant.DomainModel.ApplicationModel.Employee.EmployeeListItem>
+
+    <table class="table table-bordered table-hover table-striped ">
+    <thead>
+        <tr>
+            <th>
+                Employee ID
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>
+                User Name
+            </th>
+            <th>
+                Password
+            </th>
+            <th>
+                Age
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+                Mobile
+            </th>
+            <th>
+                TelHome
+            </th>
+            <th>
+                Rights
+            </th>
+            <th>
+                Date Recruitment
+            </th>
+            <th>
+                Delete
+            </th>
+            <th>
+                Update
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id="tr-@item.EmployeeID">
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mobile)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TelHome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rights)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateRecruitment)
+                </td>
+                <td>
+                    <span class="btn btn-danger btn-sm btn-Remove" data-controller="EmployeeManagement" data-action="Remove" data-id="@item.EmployeeID">Delete</span>
+                </td>
+                <td>
+                    <span class="btn btn-primary btn-sm btn-update" data-controller="EmployeeManagement" data-action="Update" data-id="@item.EmployeeID">Update</span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+@* <style>
+    .accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+    }
+
+        .active, .accordion:hover {
+            background-color: #ccc;
+        }
+
+    .panel {
+        padding: 0 18px;
+        display: none;
+        background-color: white;
+        overflow: hidden;
+    }
+</style>
+<body>
+
+    <h2>Accordion</h2>
+
+    <button class="accordion">Section 1</button>
+    <div class="panel">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
+
+</body> *@
