@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Restaurant.Application
 {
-	public class EmployeeApplication : IEmployeeApplication
+    public class EmployeeApplication : IEmployeeApplication
     {
         private readonly IEmployeeRepository EmpRepo;
 
@@ -43,14 +43,14 @@ namespace Restaurant.Application
             EmployeeAddAndEditModel empAddEdit = new EmployeeAddAndEditModel
             {
                 Address = employee.Address,
-                EmployeeID =employee.EmployeeID,
-                Age=employee.Age,
+                EmployeeID = employee.EmployeeID,
+                Age = employee.Age,
                 DateRecruitment = DateTime.Now,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                Mobile =employee.Mobile,
+                Mobile = employee.Mobile,
                 Rights = employee.Rights,
-                TelHome=employee.TelHome,
+                TelHome = employee.TelHome,
                 Password = employee.Password,
                 UserName = employee.UserName,
             };
@@ -68,7 +68,7 @@ namespace Restaurant.Application
             {
                 return new OperationResult("Register Employee").ToFail("Duplicate Employee Mobile");
             }
-            if(EmpRepo.ExistEmployeeName(employee.FirstName , employee.LastName ))
+            if (EmpRepo.ExistEmployeeName(employee.FirstName, employee.LastName))
             {
                 return new OperationResult("Register Employee").ToFail("Duplicate Employee Name");
             }
@@ -97,9 +97,9 @@ namespace Restaurant.Application
             return EmpRepo.Update(emp);
         }
 
-		public List<EmployeeListItem> GetAllListItem()
-		{
-			return EmpRepo.GetAllListItem();
-		}
-	}
+        public List<EmployeeListItem> GetAllListItem()
+        {
+            return EmpRepo.GetAllListItem();
+        }
+    }
 }

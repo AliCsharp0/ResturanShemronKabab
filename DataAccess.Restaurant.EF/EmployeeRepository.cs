@@ -55,11 +55,11 @@ namespace DataAccess.Restaurant.EF
             return db.Employees.ToList();
         }
 
-		public List<EmployeeListItem> GetAllListItem()
-		{
-			var emp =  db.Employees.Select(x => new EmployeeListItem
-			{
-				Address = x.Address,
+        public List<EmployeeListItem> GetAllListItem()
+        {
+            var emp = db.Employees.Select(x => new EmployeeListItem
+            {
+                Address = x.Address,
                 Age = x.Age,
                 DateRecruitment = x.DateRecruitment,
                 EmployeeID = x.EmployeeID,
@@ -70,11 +70,11 @@ namespace DataAccess.Restaurant.EF
                 TelHome = x.TelHome,
                 Password = x.Password,
                 UserName = x.UserName,
-			}).ToList();
-			return emp;
-		}
+            }).ToList();
+            return emp;
+        }
 
-		public OperationResult Register(Employee Current)
+        public OperationResult Register(Employee Current)
         {
             OperationResult op = new OperationResult("Register Employee");
             try
@@ -114,7 +114,7 @@ namespace DataAccess.Restaurant.EF
             var q = from emp in db.Employees select emp;
             if (!string.IsNullOrEmpty(searchModel.FirstName))
             {
-                q = q.Where(x => x.FirstName == searchModel.FirstName);
+                q = q.Where(x => x.FirstName.StartsWith(searchModel.FirstName));
             }
             if (!string.IsNullOrEmpty(searchModel.LastName))
             {
@@ -162,11 +162,11 @@ namespace DataAccess.Restaurant.EF
                 db.SaveChanges();
                 return op.ToSuccess("Saved");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return op.ToFail("Update Employee Failed" + ex.Message);
             }
         }
 
-	}
+    }
 }

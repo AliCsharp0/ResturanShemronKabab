@@ -96,6 +96,21 @@
 			BindGrid();
 		});
 
+
+		//Search
+
+		$(document).on("click", ".spnSearch", function () {
+			let action = $(this).attr("data-action");
+			let controller = $(this).attr("data-controller");
+			var sendingData = $("#frmSearch").serialize();
+			var sendingUrl = `/${controller}/${action}`;
+			$.get(sendingUrl, sendingData, function (partialSearch) {
+				$("#dvContent").html(partialSearch);
+			});
+		});
+
+
+
 		//Delete
 		debugger;
 		$(document).on("click", ".btn-Remove", function () {

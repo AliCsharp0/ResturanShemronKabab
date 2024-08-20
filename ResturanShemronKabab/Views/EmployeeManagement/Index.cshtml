@@ -1,7 +1,63 @@
-﻿
+﻿@model Restaurant.DomainModel.ApplicationModel.Employee.EmployeeSearchModel
+<form asp-controller="EmployeeManagement" asp-action="Index" method="get" id="frmSearch">
+    <table class="table table-bordered table-hover table-striped table-sm">
+        <tr>
+            <label asp-for="Age" class="form-control"></label>
+            <td>
+                <input type="text" class="form-control" asp-for="Age" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label asp-for="FirstName" class="form-control"></label>
+                <input type="text" class="form-control" asp-for="FirstName" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label asp-for="LastName" class="form-control"></label>
+                <input type="text" class="form-control" asp-for="LastName" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label asp-for="RightsFrom" class="form-control"></label>
+                <input type="text" class="form-control" asp-for="RightsFrom" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label asp-for="RightsTo" class="form-control"></label>
+                <input type="text" class="form-control" asp-for="RightsTo" />
+            </td>
+        </tr>
+        <tr class="text-center">
+            <td colspan="2">
+                <span class="btn btn-primary btn-sm spnSearch" data-controller="EmployeeManagement" data-action="Search">Search</span>
+                @Html.ActionLink("RemoveFilter", "Index", "EmployeeManagement", null, new { @class = "btn btn-danger btn-sm" })
+            </td>
+        </tr>
+    </table>
+
+</form>
 
 
+<span class="btn btn-success btn-sm btn-add" data-controller="EmployeeManagement" data-action="Add">Add New</span>
 
-<span class="btn btn-success btn-add" data-controller="EmployeeManagement" data-action="Add">Add New</span>
+<div id="dvContent" data-controller="EmployeeManagement" data-action="List" data-search-form="frmSearch">
+</div>
 
- <div id="dvContent" data-controller="EmployeeManagement" data-action="List" data-search-form="frmSearch"></div>
+@* @section Scripts
+{
+    <script>
+        $(document).on("click", ".spnSearch", function () {
+
+            var sendingData = $("#frmSearch").serialize();  // اطلاعات فرم را سریالایز می‌کند.
+            var sendingUrl = "@Url.Action("Search", "EmployeeManagement")";
+
+            $.get(sendingUrl, sendingData, function (partialSearch) {
+                $("#dvContent").html(partialSearch);
+            });
+        });
+    </script>
+} *@

@@ -43,19 +43,20 @@ namespace ResturanShemronKabab.Controllers
         public IActionResult Update(int id)
         {
 
-            var cat =  employeeApplication.Get(id);
+            var cat = employeeApplication.Get(id);
             return View(cat);
         }
         [HttpPost]
         public JsonResult Update(EmployeeAddAndEditModel emp)
         {
-                var op =  employeeApplication.Update(emp);
+            var op = employeeApplication.Update(emp);
             return Json(op);
         }
 
         public IActionResult Search(EmployeeSearchModel sm)
         {
-            return ViewComponent("List", sm);
+            var emp = employeeApplication.Search(sm, out var recordCount);
+            return PartialView("List", emp);
         }
 
     }
