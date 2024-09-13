@@ -1,6 +1,5 @@
 ﻿using FrameWork.DTOS;
 using Restaurant.DomainModel.ApplicationModel.Category;
-using Restaurant.DomainModel.ApplicationModel.Customer;
 using Restaurant.DomainModel.Models;
 using System;
 using System.Collections.Generic;

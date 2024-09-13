@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FrameWork;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.FlowAnalysis;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Restaurant.Application;
 using Restaurant.ApplicationServiceContract.Services;
 using Restaurant.DomainModel.ApplicationModel.Appetizer;
 using Restaurant.DomainModel.ApplicationModel.Category;
+using Restaurant.DomainModel.ApplicationModel.Food;
+using ResturanShemronKabab.ViewModel;
 
 namespace ResturanShemronKabab.Controllers
 {
@@ -13,21 +18,31 @@ namespace ResturanShemronKabab.Controllers
 
 		private readonly ICategoryApplication categoryApplication;
 
-        public AppetizerManagementController(IAppetizerApplication appetizerApplication , ICategoryApplication categoryApplication)
+        private readonly IHostEnvironment env;
+
+        public AppetizerManagementController(IAppetizerApplication appetizerApplication , ICategoryApplication categoryApplication, IHostEnvironment env) 
         {
             this.appetizerApplication = appetizerApplication;
 			this.categoryApplication = categoryApplication;
+			this.env = env;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(AppetizerSearchModel sm)
 		{
-			return View();
+			InflateCategoryDrp();
+			return View(sm);
 		}
 
 		public IActionResult List()
 		{
 			var Aappe = appetizerApplication.GetAllListItem();
 			return View(Aappe);
+		}
+
+		public IActionResult ListUI()
+		{
+			var appetizer = appetizerApplication.GetAllListItemInUI();
+			return View(appetizer);
 		}
 
 		private void InflateCategoryDrp()
@@ -43,16 +58,42 @@ namespace ResturanShemronKabab.Controllers
 			InflateCategoryDrp();
 			return View();
 		}
-		[HttpPost]
-		public JsonResult Add(AppetizerAddAndEditModel model)
-		{
-			var op = appetizerApplication.Register(model);
-			return Json(op);
-		}
+        [HttpPost]
+        public JsonResult Add(AppetizerAddEditViewModel model)
+        {
+            string PhisycalAddress = Path.GetFileName(model.Picture.FileName).ToUniqueFileName();
+            string Relativeaddress = @"~/Images/" + PhisycalAddress;
+            PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
+            FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+            {
+                model.Picture.CopyTo(fs);
+            };
+            AppetizerAddAndEditModel appetizerAddAndEditModel = new AppetizerAddAndEditModel
+            {
+                ImageURL = Relativeaddress,
+				AppetizerID = model.AppetizerID,
+				CategoryID = model.CategoryID,
+				AppetizerName = model.AppetizerName,
+			    SmallDescription = model.SmallDescription,
+				UnitPrice = model.UnitPrice,
+               
+            };
+            var op = appetizerApplication.Register(appetizerAddAndEditModel);
+            return Json(op);
+        }
 
-		[HttpPost]
+        [HttpPost]
 		public JsonResult Remove(int id)
 		{
+			var appetizer = appetizerApplication.Get(id);
+			if (!string.IsNullOrEmpty(appetizer.ImageURL))
+			{
+				var url = env.ContentRootPath + @"\wwwroot" + appetizer.ImageURL.Substring(1, appetizer.ImageURL.Length - 1).Replace(@"/", @"\");
+				if (System.IO.File.Exists(url))
+				{
+					System.IO.File.Delete(url);
+				}
+			}
 			var op = appetizerApplication.Remove(id);
 			return Json(op);
 		}
@@ -68,6 +109,12 @@ namespace ResturanShemronKabab.Controllers
 		{
 			var op = appetizerApplication.Update(model);
 			return Json(op);
+		}
+
+		public IActionResult Search(AppetizerSearchModel searchModel)
+		{
+			var appetizer = appetizerApplication.Search(searchModel, out int recordCount);
+			return PartialView("List", appetizer);
 		}
 
 	}

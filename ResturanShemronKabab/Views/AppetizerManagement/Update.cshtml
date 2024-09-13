@@ -20,23 +20,23 @@
             </div>
             <div class="form-group">
                 <label asp-for="AppetizerName" class="control-label"></label>
-                <input asp-for="AppetizerName" class="form-control" />
-                <span asp-validation-for="AppetizerName" class="text-danger"></span>
+                <input asp-for="AppetizerName" class="form-control" type="text" placeholder="Appetizer Name" id="Name" data-Err-Name="spnErrName" data-msg="Enter your Appetizer Name correctly" oninput="ValidationName(this)" />
+                <span class="text-danger" id="spnErrName"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UnitPrice" class="control-label"></label>
-                <input asp-for="UnitPrice" class="form-control" />
-                <span asp-validation-for="UnitPrice" class="text-danger"></span>
+                <input asp-for="UnitPrice" class="form-control" type="text" placeholder="UnitPrice" id="UnitPrice" data-Err-UnitPrice="spnErrUnitPrice" data-msg="Enter your UnitPrice correctly" oninput="ValidationUnitPrice(this)" />
+                <span class="text-danger" id="spnErrUnitPrice"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SmallDescription" class="control-label"></label>
-                <input asp-for="SmallDescription" class="form-control" />
-                <span asp-validation-for="SmallDescription" class="text-danger"></span>
+                <input asp-for="SmallDescription" class="form-control" type="text" placeholder="Small Description" id="SmallDescription" data-Err-SmallDescription="spnErrSmallDescription" data-msg="Enter your Small Description correctly" oninput="ValidationSmallDescription(this)" />
+                <span class="text-danger" id="spnErrSmallDescription"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
+                <label asp-for="ImageURL" class="control-label"></label>
+                <input asp-for="ImageURL" class="form-control" />
+                <span asp-validation-for="ImageURL" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <span type="submit" class="btn btn-success saveUpdate" data-action="Update" data-controller="AppetizerManagement" data-form-id="frmUpdateAppetizer">Update</span>

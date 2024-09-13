@@ -1,4 +1,5 @@
 ﻿using FrameWork.BaseRepository;
+using FrameWork.DTOS;
 using Restaurant.DomainModel.ApplicationModel.Employee;
 using Restaurant.DomainModel.Models;
 using System;
@@ -18,6 +19,14 @@ namespace Restaurant.DataAccessServiceContract.Repositories
         bool DateRecruitmentNowBiggerThanNow(DateTime DateRecruitment);
 
         bool ExistUserName(string UserName);
+
+        bool ExistNameInUpdate(int ID, string FirstName, string LastName);
+
+        bool ExistMobileNumberInUpdate(int ID, string Mobile);
+
+        bool ExistUserNameInUpdate(int ID, string UserName);
+
+        bool ExistLogin(string UserName, string password);
 
     }
 }

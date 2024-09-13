@@ -19,7 +19,7 @@ namespace Restaurant.DomainModel.Models.Configurations
 
             builder.Property(x => x.SmallDescription).IsRequired().HasMaxLength(200);
 
-            builder.Property(x => x.Image).IsRequired().HasMaxLength(35);
+            builder.Property(x => x.ImageURL).IsRequired().HasMaxLength(300);
 
             builder.HasMany(x=>x.orderDetails).WithOne(x=>x.appetizer).HasForeignKey(x=>x.AppetizerID).OnDelete(DeleteBehavior.NoAction);
         }

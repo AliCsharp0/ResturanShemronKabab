@@ -68,8 +68,6 @@ namespace DataAccess.Restaurant.EF
                 Mobile = x.Mobile,
                 Rights = x.Rights,
                 TelHome = x.TelHome,
-                Password = x.Password,
-                UserName = x.UserName,
             }).ToList();
             return emp;
         }
@@ -168,5 +166,24 @@ namespace DataAccess.Restaurant.EF
             }
         }
 
+        public bool ExistNameInUpdate(int ID, string FirstName, string LastName)
+        {
+            return db.Employees.Any(x => x.EmployeeID != ID && x.FirstName == FirstName && x.LastName == LastName);
+        }
+
+        public bool ExistMobileNumberInUpdate(int ID, string Mobile)
+        {
+            return db.Employees.Any(x => x.EmployeeID != ID && x.Mobile == Mobile);
+        }
+
+        public bool ExistUserNameInUpdate(int ID, string UserName)
+        {
+            return db.Employees.Any(x => x.EmployeeID != ID && x.UserName == UserName);
+        }
+
+		public bool ExistLogin(string UserName, string password)
+		{
+			return db.Employees.Any(x=>x.UserName == UserName && x.Password == password);
+		}
     }
 }

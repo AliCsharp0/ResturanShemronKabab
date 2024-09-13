@@ -23,5 +23,8 @@ namespace Restaurant.ApplicationServiceContract.Services
 
         List<BeveragesListItem> GetAllListItem();
 
-    }
+		List<BeveragesListItemUI> GetAllListItemInUI();
+
+
+	}
 }

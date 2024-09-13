@@ -1,0 +1,80 @@
+﻿@model Security.Domain.DTO.User.Login
+@{
+	Layout = null;
+}
+<style>
+
+	.ContainerAll {
+		display: flex;
+		justify-content: center;
+	}
+
+	.btnLogin{
+		display: flex;
+		justify-content: center;
+		margin-top: 10px;
+		margin-bottom: 3px;
+	}
+
+	.ContainerLabelText{
+		display: flex;
+		width: 100%;
+		justify-content: end;
+	}
+</style>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/ResturanShemronKabab.styles.css" asp-append-version="true" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<link href="~/css/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/js/sweetalert2.min.js"></script>
+<div class="account-box-content ContainerAll">
+	<div class="col-md-3">
+		<form class="form-account form-control " asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl" asp-controller="Account" method="post">
+
+			@if (ViewBag.ErrorMessage != null)
+			{
+				<h4 class="text-center h4 text-danger">@ViewBag.ErrorMessage</h4>
+			}
+			<div class="form-account-title ContainerAll">ایمیل یا شماره موبایل</div>
+
+			<div class="form-account-row  ">
+				<label asp-for="Username" class="control-label ContainerLabelText"></label>
+				<input asp-for="Username" class="form-control" />
+				<span asp-validation-for="Username" class="text-danger"></span>
+			</div>
+
+			<div class="form-account-title ContainerAll">
+				رمز عبور
+				<a href="" class="btn-link-border form-account-link ContainerAll">
+					رمز عبور خود را فراموش کردم
+				</a>
+			</div>
+
+			<div class="form-account-row ">
+				<label asp-for="Password" class="control-label ContainerLabelText"></label>
+				<input asp-for="Password" class="form-control" />
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+
+			<div class="form-account-row form-account-submit btnLogin">
+				<div class="parent-btn">
+					<button class="dk-btn dk-btn-info ">
+						ورود به شمرون کباب
+						<i class="fa fa-sign-in"></i>
+					</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	
+</div>
+<div class="account-box-footer ContainerAll">
+	<span>کاربر جدید هستید؟</span>
+	<a href="/Account/Create" class="btn-link-border">
+		ثبت نام در شمرون کباب
+	</a>
+</div>

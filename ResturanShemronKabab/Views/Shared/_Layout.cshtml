@@ -12,6 +12,7 @@
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	<link href="~/css/sweetalert2.min.css" rel="stylesheet" />
 	<script src="~/js/sweetalert2.min.js"></script>
+	<script src="~/validation/validation.js"></script>
 	@await RenderSectionAsync("Scripts", required: false)
 </head>
 <body>
@@ -29,9 +30,6 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-						</li>
-						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="EmployeeManagement" asp-action="Index">Employee</a>
 						</li>
 						<li class="nav-item">
@@ -45,6 +43,12 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="BeveragesManagement" asp-action="Index">Beverages</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="CategoryManagement" asp-action="Index">Category</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="UserManagement" asp-action="Index">User</a>
 						</li>
 					</ul>
 				</div>
@@ -63,168 +67,266 @@
 		</div>
 	</footer>
 
-	<script>
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+	<body>
 
-		function SuccessMessage(SuccessTxt) {
-			Swal.fire({
-				icon: 'success',
-				title: 'با موفقیت انجام شد ',
-				text: SuccessTxt,
+		<script>
+
+			function SuccessMessage(SuccessTxt) {
+				Swal.fire({
+					icon: 'success',
+					title: 'با موفقیت انجام شد ',
+					text: SuccessTxt,
+				});
+			}
+			function ErrorMessage(ErrorTxt) {
+				Swal.fire({
+					icon: 'error',
+					title: 'خطا',
+					text: ErrorTxt,
+				});
+			}
+
+			//BindGrid SSR
+			function BindGrid() {
+				let action = $("#dvContent").attr("data-action");
+				let controller = $("#dvContent").attr("data-controller");
+				let sendingUrl = `/${controller}/${action}`;
+				let sendingData = null;
+				// $(".waiting").css("display", "flex");
+				$.get(sendingUrl, sendingData, function (recevingData) {
+					// $(".waiting").css("display", "none");
+					$("#dvContent").html(recevingData);
+				});
+			}
+
+			function BindGrid2() {
+				let action = $("#dvContent2").attr("data-action");
+				let controller = $("#dvContent2").attr("data-controller");
+				let sendingUrl = `/${controller}/${action}`;
+				let sendingData = null;
+				// $(".waiting").css("display", "flex");
+				$.get(sendingUrl, sendingData, function (recevingData) {
+					// $(".waiting").css("display", "none");
+					$("#dvContent2").html(recevingData);
+				});
+			}
+
+			function BindGrid3() {
+				let action = $("#dvContent3").attr("data-action");
+				let controller = $("#dvContent3").attr("data-controller");
+				let sendingUrl = `/${controller}/${action}`;
+				let sendingData = null;
+				// $(".waiting").css("display", "flex");
+				$.get(sendingUrl, sendingData, function (recevingData) {
+					// $(".waiting").css("display", "none");
+					$("#dvContent3").html(recevingData);
+				});
+			}
+
+			$(document).ready(function () {
+				BindGrid();
+				BindGrid2();
+				BindGrid3();
 			});
-		}
-		function ErrorMessage(ErrorTxt) {
-			Swal.fire({
-				icon: 'error',
-				title: 'خطا',
-				text: ErrorTxt,
+
+
+
+			//Search
+
+			$(document).on("click", ".spnSearch", function () {
+				let action = $(this).attr("data-action");
+				let controller = $(this).attr("data-controller");
+				var sendingData = $("#frmSearch").serialize();
+				var sendingUrl = `/${controller}/${action}`;
+				$.get(sendingUrl, sendingData, function (partialSearch) {
+					$("#dvContent").html(partialSearch);
+				});
 			});
-		}
 
-		//BindGrid SSR
-		function BindGrid() {
-			let action = $("#dvContent").attr("data-action");
-			let controller = $("#dvContent").attr("data-controller");
-			let sendingUrl = `/${controller}/${action}`;
-			let sendingData = null;
-			// $(".waiting").css("display", "flex");
-			$.get(sendingUrl, sendingData, function (recevingData) {
-				// $(".waiting").css("display", "none");
-				$("#dvContent").html(recevingData);
+
+
+			//Delete
+			$(document).on("click", ".btn-Remove", function () {
+				if (confirm("آیا مطمن هستید")) {
+					let action = $(this).attr("data-action");
+					let controller = $(this).attr("data-controller");
+					let id = $(this).attr("data-id");
+					let sendingUrl = `/${controller}/${action}`;
+					let sendingData = `id=${id}`;
+					//$(".waiting").css("display", "flex");
+					$.post(sendingUrl, sendingData, function (operationResult) {
+						if (operationResult.success.toString() == "true") {
+							BindGrid();
+							SuccessMessage(operationResult.message);
+						}
+						else {
+							ErrorMessage(operationResult.message);
+						}
+
+					});
+				}
 			});
-		}
-		$(document).ready(function () {
-			BindGrid();
-		});
 
+			//add image
+			$(document).ready(function () {
+				$('#frmAddFood').submit(function (event) {
+					event.preventDefault(); // جلوگیری از ارسال فرم به صورت عادی
 
-		//Search
+					var formData = new FormData(this);
 
-		$(document).on("click", ".spnSearch", function () {
-			let action = $(this).attr("data-action");
-			let controller = $(this).attr("data-controller");
-			var sendingData = $("#frmSearch").serialize();
-			var sendingUrl = `/${controller}/${action}`;
-			$.get(sendingUrl, sendingData, function (partialSearch) {
-				$("#dvContent").html(partialSearch);
+					$.ajax({
+						url: '@Url.Action("Add", "FoodManagement")',
+						type: 'POST',
+						data: formData,
+						contentType: false,
+						processData: false,
+						success: function (response) {
+							// نمایش پیام موفقیت یا انجام عملیات دیگر
+							alert('Food added successfully!');
+						},
+						error: function (xhr, status, error) {
+							// نمایش پیام خطا یا انجام عملیات دیگر
+							alert('Error: ' + error);
+						}
+					});
+				});
 			});
-		});
 
 
 
-		//Delete
-		debugger;
-		$(document).on("click", ".btn-Remove", function () {
-			debugger;
-			if (confirm("آیا مطمن هستید")) {
+			//Add
+			$(document).on("click", ".btn-add", function () {
+				let action = $(this).attr("data-action");
+				let controller = $(this).attr("data-controller");
+				let sendingUrl = `/${controller}/${action}`;
+				let sendingData = null;
+				$.get(sendingUrl, sendingData, function (frmAdd) {
+					$("#dvModalContent").html(frmAdd);
+					$("#mainModal").modal("show");
+				});
+			});
+
+			//save add image 
+			$(document).on("click", ".saveAdd", function () {
+				debugger;
+				let action = $(this).attr("data-action");
+				let controller = $(this).attr("data-controller");
+				let formid = "#" + $(this).attr("data-form-id");
+				let sendingUrl = `/${controller}/${action}`;
+
+				// Create a FormData object
+				let formData = new FormData($(formid)[0]);
+
+				// Log FormData contents for debugging
+				for (let pair of formData.entries()) {
+					console.log(pair[0] + ', ' + pair[1]);
+				}
+
+				$.ajax({
+					url: sendingUrl,
+					type: 'POST',
+					data: formData,
+					contentType: false, // Prevent jQuery from setting the Content-Type header
+					processData: false, // Prevent jQuery from processing the data
+					success: function (op) {
+						if (op.success.toString() == "true") {
+							$("#mainModal").modal("hide");
+							BindGrid();
+							SuccessMessage(op.message);
+						} else {
+							ErrorMessage(op.message);
+						}
+					}
+				});
+			});
+
+
+			// //saveAdd
+			// $(document).on("click", ".saveAdd", function () {
+			// 	debugger;
+			// 	let action = $(this).attr("data-action");
+			// 	let controller = $(this).attr("data-controller");
+			// 	let formid = "#" + $(this).attr("data-form-id");
+			// 	let sendingUrl = `/${controller}/${action}`;
+			// 	let sendingData = $(formid).serialize();
+			// 	$.post(sendingUrl, sendingData, function (op) {
+			// 		if (op.success.toString() == "true") {
+
+			// 			$("#mainModal").modal("hide");
+			// 			BindGrid();
+			// 			SuccessMessage(op.message);
+
+			// 		}
+			// 		else {
+			// 			 ErrorMessage(op.message);
+			// 		}
+			// 	});
+			// });
+
+
+
+			//Update
+			$(document).on("click", ".btn-update", function () {
+
 				let action = $(this).attr("data-action");
 				let controller = $(this).attr("data-controller");
 				let id = $(this).attr("data-id");
 				let sendingUrl = `/${controller}/${action}`;
 				let sendingData = `id=${id}`;
-				// $(".waiting").css("display", "flex");
-				$.post(sendingUrl, sendingData, function (operationResult) {
-					if (operationResult.success.toString() == "true") {
+				$.get(sendingUrl, sendingData, function (frmUpdate) {
+					console.log(frmUpdate);
+					$("#dvModalContent").html(frmUpdate);// in information masalan newsCategory ro da modal jai gozary mikone
+					$("#mainModal").modal("show");
+				});
+			});
+
+			//saveUpdate
+			$(document).on("click", ".saveUpdate", function () {
+				let action = $(this).attr("data-action");
+				let controller = $(this).attr("data-controller");
+				let formid = "#" + $(this).attr("data-form-id");
+
+				let sendingUrl = `/${controller}/${action}`;
+				let sendingData = $(formid).serialize();
+				$.post(sendingUrl, sendingData, function (op) {
+					if (op.success.toString() == "true") {
+
+						$("#mainModal").modal("hide");
 						BindGrid();
-						SuccessMessage(operationResult.message);
+						SuccessMessage(op.message);
 					}
 					else {
-						ErrorMessage(operationResult.message);
+						ErrorMessage(op.message);
 					}
+				});
+			});
 
+
+			//Accordion
+			var acc = document.getElementsByClassName("accordion");
+			var i;
+
+			for (i = 0; i < acc.length; i++) {
+				acc[i].addEventListener("click", function () {
+					this.classList.toggle("active");
+					var panel = this.nextElementSibling;
+					if (panel.style.display === "block") {
+						panel.style.display = "none";
+					} else {
+						panel.style.display = "block";
+					}
 				});
 			}
-		});
+		</script>
 
-		//Add
-		$(document).on("click", ".btn-add", function () {
-			let action = $(this).attr("data-action");
-			let controller = $(this).attr("data-controller");
-			let sendingUrl = `/${controller}/${action}`;
-			let sendingData = null;
-			$.get(sendingUrl, sendingData, function (frmAdd) {
-				$("#dvModalContent").html(frmAdd);
-				$("#mainModal").modal("show");
-			});
-		});
-
-		//saveAdd
-		$(document).on("click", ".saveAdd", function () {
-			debugger;
-			let action = $(this).attr("data-action");
-			let controller = $(this).attr("data-controller");
-			let formid = "#" + $(this).attr("data-form-id");
-			let sendingUrl = `/${controller}/${action}`;
-			let sendingData = $(formid).serialize();
-			$.post(sendingUrl, sendingData, function (op) {
-				if (op.success.toString() == "true") {
-
-					$("#mainModal").modal("hide");
-					BindGrid();
-					SuccessMessage(op.message);
-
-				}
-				else {
-					ErrorMessage(op.message);
-				}
-			});
-		});
-
-		//Update
-		$(document).on("click", ".btn-update", function () {
-
-			let action = $(this).attr("data-action");
-			let controller = $(this).attr("data-controller");
-			let id = $(this).attr("data-id");
-			let sendingUrl = `/${controller}/${action}`;
-			let sendingData = `id=${id}`;
-			$.get(sendingUrl, sendingData, function (frmUpdate) {
-				console.log(frmUpdate);
-				$("#dvModalContent").html(frmUpdate);// in information masalan newsCategory ro da modal jai gozary mikone
-				$("#mainModal").modal("show");
-			});
-		});
-
-		//saveUpdate
-		$(document).on("click", ".saveUpdate", function () {
-			let action = $(this).attr("data-action");
-			let controller = $(this).attr("data-controller");
-			let formid = "#" + $(this).attr("data-form-id");
-
-			let sendingUrl = `/${controller}/${action}`;
-			let sendingData = $(formid).serialize();
-			$.post(sendingUrl, sendingData, function (op) {
-				if (op.success.toString() == "true") {
-
-					$("#mainModal").modal("hide");
-					BindGrid();
-					SuccessMessage(op.message);
-				}
-				else {
-					ErrorMessage(op.message);
-				}
-			});
-		});
-
-
-		//Accordion
-		var acc = document.getElementsByClassName("accordion");
-		var i;
-
-		for (i = 0; i < acc.length; i++) {
-			acc[i].addEventListener("click", function () {
-				this.classList.toggle("active");
-				var panel = this.nextElementSibling;
-				if (panel.style.display === "block") {
-					panel.style.display = "none";
-				} else {
-					panel.style.display = "block";
-				}
-			});
-		}
-
-
-
-	</script>
+	</body>
+</html>
 
 	<div class="modal" tabindex="-1" id="mainModal">
 		<div class="modal-dialog">

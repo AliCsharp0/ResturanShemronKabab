@@ -1,8 +1,164 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+@{
+	Layout = null;
 }
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - ResturanShemronKabab</title>
+	<link href="~/css/cssui.css" rel="stylesheet" />
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/js/sweetalert2.min.js"></script>
+	<link href="~/content/font-awesome.min.css" rel="stylesheet" />
+	<link href="~/content/font-awesome.css" rel="stylesheet" />
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+			<div class="container-fluid">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					<ul class="navbar-nav flex-grow-1" style=" display: flex;justify-content: end;">
+						<li class="nav-item ContainerLoginAdmin">
+							<a href="https://localhost:7107/PageAdmin/Index" class="nav-link text-dark navLinkTopMenu " id="LoginAdmin"> 
+								<i style="margin-top:5px;margin-right:3px" class="fa fa-cog iconCog" aria-hidden="true"></i> مدریت</a>
+						</li>
+						<li class="nav-item">
+							<a href="https://localhost:7107/Account/login" class="nav-link text-dark navLinkTopMenu LoginAdmin" id="LoginMenu">ورود</a>
+						</li>
+						<li class="nav-item">
+							<a href="" class="nav-link text-dark navLinkTopMenu">صفحه اصلی </a>
+						</li>
+						<li class="nav-item">
+							<a href="" class="nav-link text-dark navLinkTopMenu">سفارش اینترنتی</a>
+						</li>
+						<li class="nav-item">
+							<a href="" class="nav-link text-dark navLinkTopMenu">درباره </a>
+						</li>
+						<li class="nav-item">
+							<a href="" class="nav-link text-dark navLinkTopMenu">تماس با ما</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+
+
+	<div class="divImageTopPageKabab">
+		<img src="~/Images/KababAmade2.jpg" class="ImageTopPageKabab" />
+		<h1 class="h1ImageTopPage">نیاوران</h1>
+		<h3 class="AddressImageTopPage">آدرس: نیاوران، بعد از چهارراه مژده، پلاک 455</h3>
+		@*        <i class="fa fa-rocket iconImageTopPage" aria-hidden="true"></i> *@
+		<i class="fa fa-hand-paper-o iconImageTopPage" aria-hidden="true"></i>
+		<p class="TextImageTopPage">سفارش می‌پذیریم</p>
+	</div>
+
+	<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+		<div class="container-fluid containerMenuCategory">
+			<div class=" divContainerImageAnimeKababMenu">
+				<div class="divOneImageAnimeKababMenu">
+					<img src="~/Images/icon-kebab2.jpg" class="ImageAnimeKababMenu" />
+					<p class="TextAnimeKababMenu"> کباب</p>
+				</div>
+				<div class="divOneImageAnimeKababMenu">
+					<img src="~/Images/icon-Shig.jpg" class="ImageAnimeKababMenu" />
+					<p class="TextAnimeKababMenu">منوی ترکیبی</p>
+				</div>
+				<div class="divOneImageAnimeKababMenu">
+					<img src="~/Images/icon-salad.jpg" class="ImageAnimeKababMenu" />
+					<p class="TextAnimeKababMenu">پیش غذا </p>
+				</div>
+				<div class="divOneImageAnimeKababMenu">
+					<img src="~/Images/icon-beverage.jpg" class="ImageAnimeKababMenu" />
+					<p class="TextAnimeKababMenu">نوشیدنی</p>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+</body>
+</html>
+<p class="Text"> غذاها </p>
+
+<div id="dvContent" data-controller="FoodManagement" data-action="ListUI" data-search-form="frmSearch"></div>
+
+<p class="Text">پیش غذا</p>
+
+<div id="dvContent2" data-controller="AppetizerManagement" data-action="ListUI" data-search-form="frmSearch"></div>
+
+<p class="Text"> نوشیدنی </p>
+
+<div id="dvContent3" data-controller="BeveragesManagement" data-action="ListUI" data-search-form="frmSearch"></div>
+
+
+
+<script>
+	function BindGrid() {
+		let action = $("#dvContent").attr("data-action");
+		let controller = $("#dvContent").attr("data-controller");
+		let sendingUrl = `/${controller}/${action}`;
+		let sendingData = null;
+		// $(".waiting").css("display", "flex");
+		$.get(sendingUrl, sendingData, function (recevingData) {
+			// $(".waiting").css("display", "none");
+			$("#dvContent").html(recevingData);
+		});
+	}
+
+	function BindGrid2() {
+		let action = $("#dvContent2").attr("data-action");
+		let controller = $("#dvContent2").attr("data-controller");
+		let sendingUrl = `/${controller}/${action}`;
+		let sendingData = null;
+		// $(".waiting").css("display", "flex");
+		$.get(sendingUrl, sendingData, function (recevingData) {
+			// $(".waiting").css("display", "none");
+			$("#dvContent2").html(recevingData);
+		});
+	}
+
+	function BindGrid3() {
+		let action = $("#dvContent3").attr("data-action");
+		let controller = $("#dvContent3").attr("data-controller");
+		let sendingUrl = `/${controller}/${action}`;
+		let sendingData = null;
+		// $(".waiting").css("display", "flex");
+		$.get(sendingUrl, sendingData, function (recevingData) {
+			// $(".waiting").css("display", "none");
+			$("#dvContent3").html(recevingData);
+		});
+	}
+
+	$(document).ready(function () {
+		BindGrid();
+		BindGrid2();
+		BindGrid3();
+	});
+</script>
+
+<div class="containerInformationButtomBlueSmall">
+	<div class="listBox">
+		<p class="Address">آدرس : تهران - نیاوران - بالاتر از خیابان ملک -  جنب بانک صادرات - پلاک 561 - طبقه2 - واحد7 </p>
+		<p class="Telephon">تلفن : 88146330 - 88146323</p>
+		<p class="Mobile"> موبایل : 09905283471      مدیریت: 09123840871</p>
+		<p class="Emaile">ایمیل : ShemroonKabab@gmail.com</p>
+		<div class="containerWordMajaziTahlilDadeh">
+			<img src="~/Images/in.png" alt="programin">
+			<img src="~/Images/insta.png" alt="programinasta">
+			<img src="~/Images/watsapp.png" alt="programWatsApp">
+			<img src="~/Images/telgram.png" alt="programTelegtam">
+		</div>
+	</div>
 </div>

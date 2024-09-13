@@ -18,6 +18,6 @@ namespace Restaurant.DomainModel.ApplicationModel.Food
 
         public string Materials { get; set; }
 
-        public string Image { get; set; }
+        public string ImageURL { get; set; }
     }
 }

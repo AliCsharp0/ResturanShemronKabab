@@ -21,9 +21,9 @@ namespace ResturanShemronKabab.Controllers
 			ViewBag.drpRoots = new SelectList(cats, "CategoryID", "CategoryName");
 		}
 
-		public IActionResult Index()
+		public IActionResult Index(CategorySearchModel sm)
 		{
-			return View();
+			return View(sm);
 		}
 
 		public IActionResult List()
@@ -67,6 +67,12 @@ namespace ResturanShemronKabab.Controllers
 		{
 			var op = CatApplication.Update(model);
 			return Json(op);
+		}
+
+		public IActionResult Search (CategorySearchModel searchModel)
+		{
+			var cat = CatApplication.Search(searchModel, out int recordCount);
+			return PartialView("List", cat);
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using Restaurant.DataAccessServiceContract.Repositories;
 using Restaurant.DomainModel.ApplicationModel.Appetizer;
 using Restaurant.DomainModel.ApplicationModel.Employee;
+using Restaurant.DomainModel.ApplicationModel.Food;
 using Restaurant.DomainModel.Models;
 using System;
 using System.Collections.Generic;
@@ -27,10 +28,20 @@ namespace DataAccess.Restaurant.EF
 
 		public bool ExistImage(string Image)
 		{
-			return db.Appetizers.Any(x => x.Image == Image);
+			return db.Appetizers.Any(x => x.ImageURL == Image);
 		}
 
-		public Appetizer Get(int ID)
+        public bool ExistImageInUpdate(int ID, string Image)
+        {
+            return db.Appetizers.Any(x=>x.AppetizerID != ID && x.ImageURL == Image);
+        }
+
+        public bool ExistNameInUpdate(int ID, string Name)
+        {
+			return db.Appetizers.Any(x => x.AppetizerID != ID && x.AppetizerName == Name);
+        }
+
+        public Appetizer Get(int ID)
 		{
 			return db.Appetizers.FirstOrDefault(x => x.AppetizerID == ID);
 		}
@@ -47,8 +58,20 @@ namespace DataAccess.Restaurant.EF
 				AppetizerID = x.AppetizerID,
 				AppetizerName = x.AppetizerName,
 				CategoryName = x.category.CategoryName,
-				Image = x.Image,
+				Image = x.ImageURL,
 				UnitPrice = x.UnitPrice,
+			}).ToList();
+			return appetizer;
+		}
+
+		public List<AppetizerListItemUI> GetAllListItemInUI()
+		{
+			var appetizer = db.Appetizers.Select(x => new AppetizerListItemUI
+			{
+				AppetizerID = x.AppetizerID,
+				AppetizerName= x.AppetizerName,
+				UnitPrice= x.UnitPrice,
+				Image = x.ImageURL,
 			}).ToList();
 			return appetizer;
 		}
@@ -96,6 +119,14 @@ namespace DataAccess.Restaurant.EF
 				searchModel.PageSize = 5;
 			}
 			var q = from appetizer in db.Appetizers select appetizer;
+			if (searchModel.CategoryID != null && searchModel.CategoryID > 0)
+			{
+				q = q.Where(x => x.CategoryID == searchModel.CategoryID);
+			}
+			if (!string.IsNullOrEmpty(searchModel.AppetizerName))
+			{
+				q = q.Where(x => x.AppetizerName == searchModel.AppetizerName);
+			}
 			if (searchModel.UnitPriceFrom != null || searchModel.UnitPriceFrom > 0)
 			{
 				q = q.Where(x => x.UnitPrice >= searchModel.UnitPriceFrom);
@@ -103,14 +134,6 @@ namespace DataAccess.Restaurant.EF
 			if (searchModel.UnitPriceTo != null || searchModel.UnitPriceTo > 0)
 			{
 				q = q.Where(x => x.UnitPrice <= searchModel.UnitPriceTo);
-			}
-			if (searchModel.AppetizerID != null)
-			{
-				q = q.Where(x => x.AppetizerID == searchModel.AppetizerID);
-			}
-			if (!string.IsNullOrEmpty(searchModel.AppetizerName))
-			{
-				q = q.Where(x => x.AppetizerName == searchModel.AppetizerName);
 			}
 			RecordCount = q.Count();
 			q = q.OrderByDescending(x => x.AppetizerID).Skip(searchModel.PageIndex * searchModel.PageSize).Take(searchModel.PageSize);
@@ -120,7 +143,7 @@ namespace DataAccess.Restaurant.EF
 						 AppetizerName = appetizer.AppetizerName,
 						 AppetizerID = appetizer.AppetizerID,
 						 CategoryName = appetizer.category.CategoryName,
-						 Image = appetizer.Image,
+						 Image = appetizer.ImageURL,
 						 UnitPrice = appetizer.UnitPrice,
 					 };
 			return q2.ToList();

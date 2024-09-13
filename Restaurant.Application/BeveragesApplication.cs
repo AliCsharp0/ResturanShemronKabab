@@ -28,7 +28,7 @@ namespace Restaurant.Application
                 BeveragesID = model.BeveragesID,
                 BeveragesName = model.BeveragesName,
                 CategoryID = model.CategoryID,
-                Image=model.Image,
+                ImageURL = model.ImageURL,
                 UnitPrice = model.UnitPrice,
             };
             return beverages;
@@ -38,7 +38,7 @@ namespace Restaurant.Application
             BeveragesAddAndEditModel addAndEditModel = new BeveragesAddAndEditModel
             {
                 CategoryID = model.CategoryID,
-                Image = model.Image,
+                ImageURL = model.ImageURL,
                 UnitPrice = model.UnitPrice,
                 BeveragesID = model.BeveragesID,
                 BeveragesName = model.BeveragesName,
@@ -55,9 +55,17 @@ namespace Restaurant.Application
         {
             if (BeveragesRepo.ExistBeveragesName(beverages.BeveragesName))
             {
-                return new OperationResult("Register Beverages").ToFail("Duplicate Beverages");
+                return new OperationResult("Register Beverages").ToFail("Duplicate Beverages Name");
             }
-            var beve = ToModel(beverages);
+            if (BeveragesRepo.ExistImage(beverages.ImageURL))
+            {
+				return new OperationResult("Register Beverages").ToFail("Duplicate Beverages Image");
+			}
+			if (beverages.CategoryID < 0)
+			{
+				return new OperationResult("Register Appetizer").ToFail("Duplicate Category Name");
+			}
+			var beve = ToModel(beverages);
             var OperationBeverages = BeveragesRepo.Register(beve); 
             return OperationBeverages;
         }
@@ -78,11 +86,19 @@ namespace Restaurant.Application
 
         public OperationResult Update(BeveragesAddAndEditModel beverages)
         {
-            if (BeveragesRepo.ExistBeveragesName(beverages.BeveragesName))
+            if (BeveragesRepo.ExistNameInUpdate(beverages.BeveragesID, beverages.BeveragesName))
             {
-                return new OperationResult("Update Beverages").ToFail("Duplicate Beverages");
+                return new OperationResult("Update beverages").ToFail("Duplicate beverages Name");
             }
-            var bever = ToModel(beverages);
+            if (BeveragesRepo.ExistImageInUpdate(beverages.BeveragesID , beverages.BeveragesName))
+            {
+                return new OperationResult("Update beverages").ToFail("Duplicate Image");
+            }
+			if (beverages.CategoryID < 0)
+			{
+				return new OperationResult("Register Appetizer").ToFail("Duplicate Category Name");
+			}
+			var bever = ToModel(beverages);
             return BeveragesRepo.Update(bever);
         }
 
@@ -90,5 +106,10 @@ namespace Restaurant.Application
         {
             return BeveragesRepo.GetAllListItem();
         }
-    }
+
+		public List<BeveragesListItemUI> GetAllListItemInUI()
+		{
+            return BeveragesRepo.GetAllListItemInUI();
+		}
+	}
 }

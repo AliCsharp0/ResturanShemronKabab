@@ -26,7 +26,7 @@ namespace Restaurant.Application
             {
                 AppetizerID = appetizerAddAndEditModel.AppetizerID,
                 CategoryID=appetizerAddAndEditModel.CategoryID,
-                Image = appetizerAddAndEditModel.Image,
+                ImageURL = appetizerAddAndEditModel.ImageURL,
                 SmallDescription=appetizerAddAndEditModel.SmallDescription,
                 AppetizerName = appetizerAddAndEditModel.AppetizerName,
                 UnitPrice = appetizerAddAndEditModel.UnitPrice,
@@ -41,7 +41,7 @@ namespace Restaurant.Application
                 AppetizerID = appetizer.AppetizerID,
                 AppetizerName=appetizer.AppetizerName,
                 CategoryID = appetizer.CategoryID,
-                Image=appetizer.Image,
+                ImageURL = appetizer.ImageURL,
                 SmallDescription = appetizer.SmallDescription,
                 UnitPrice=appetizer.UnitPrice,
             };
@@ -58,6 +58,14 @@ namespace Restaurant.Application
             if (AppetizerRepo.ExistAppetizerName(appetizer.AppetizerName))
             {
                 return new OperationResult("Register Appetizer ").ToFail("Duplicate Appetizer Name");
+            }
+            if(AppetizerRepo.ExistImage(appetizer.ImageURL))
+            {
+				return new OperationResult("Register Appetizer ").ToFail("Duplicate Appetizer Image");
+			}
+            if(appetizer.CategoryID < 0)
+            {
+                return new OperationResult("Register Appetizer").ToFail("Duplicate Category Name");
             }
             var appe = ToModel(appetizer);
             var OperationAppetizer = AppetizerRepo.Register(appe);
@@ -80,7 +88,19 @@ namespace Restaurant.Application
 
         public OperationResult Update(AppetizerAddAndEditModel appetizer)
         {
-            var appe = ToModel(appetizer);
+            if(AppetizerRepo.ExistNameInUpdate(appetizer.AppetizerID , appetizer.AppetizerName))
+            {
+                return new OperationResult("Register Appetizer").ToFail("Duplicate Appetizer Name");
+            }
+            if(AppetizerRepo.ExistImageInUpdate(appetizer.AppetizerID , appetizer.ImageURL))
+            {
+                return new OperationResult("Register Appetizer").ToFail("Duplicate Image");
+            }
+			if (appetizer.CategoryID < 0)
+			{
+				return new OperationResult("Register Appetizer").ToFail("Duplicate Category Name");
+			}
+			var appe = ToModel(appetizer);
             var OperationAppetizer = AppetizerRepo.Update(appe);
             return OperationAppetizer;
         }
@@ -90,6 +110,9 @@ namespace Restaurant.Application
             return AppetizerRepo.GetAllListItem();
         }
 
-
+		public List<AppetizerListItemUI> GetAllListItemInUI()
+		{
+			return AppetizerRepo.GetAllListItemInUI();
+		}
 	}
 }

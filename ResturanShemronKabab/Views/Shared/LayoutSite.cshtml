@@ -1,0 +1,47 @@
+﻿
+
+
+
+<script>
+	function BindGrid() {
+		let action = $("#dvContent").attr("data-action");
+		let controller = $("#dvContent").attr("data-controller");
+		let sendingUrl = `/${controller}/${action}`;
+		let sendingData = null;
+		// $(".waiting").css("display", "flex");
+		$.get(sendingUrl, sendingData, function (recevingData) {
+			// $(".waiting").css("display", "none");
+			$("#dvContent").html(recevingData);
+		});
+	}
+
+	function BindGrid2() {
+		let action = $("#dvContent2").attr("data-action");
+		let controller = $("#dvContent2").attr("data-controller");
+		let sendingUrl = `/${controller}/${action}`;
+		let sendingData = null;
+		// $(".waiting").css("display", "flex");
+		$.get(sendingUrl, sendingData, function (recevingData) {
+			// $(".waiting").css("display", "none");
+			$("#dvContent2").html(recevingData);
+		});
+	}
+
+	function BindGrid3() {
+		let action = $("#dvContent3").attr("data-action");
+		let controller = $("#dvContent3").attr("data-controller");
+		let sendingUrl = `/${controller}/${action}`;
+		let sendingData = null;
+		// $(".waiting").css("display", "flex");
+		$.get(sendingUrl, sendingData, function (recevingData) {
+			// $(".waiting").css("display", "none");
+			$("#dvContent3").html(recevingData);
+		});
+	}
+
+	$(document).ready(function () {
+		BindGrid();
+		BindGrid2();
+		BindGrid3();
+	});
+</script>

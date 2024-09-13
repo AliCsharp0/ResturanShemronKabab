@@ -1,71 +1,71 @@
 ﻿@{
-    Layout = null;
+	Layout = null;
 }
 @model IEnumerable<Restaurant.DomainModel.ApplicationModel.Category.CategoryListItem>
-<table class="table table-bordered table-hover table-striped ">
-    <thead>
-        <tr>
-            <th>
-                Category ID
-            </th>
-            <th>
-                Category Name
-            </th>
-            <th>
-                slug
-            </th>
-            <th>
-                Small Description
-            </th>
-            <th>
-                Food count
-            </th>
-            <th>
-                Beverages count
-            </th>
-            <th>
-                Appetizer count
-            </th>
-            <th>
-                Delete
-            </th>
-            <th>
-                Update
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr id="tr-@item.CategoryID">
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Slug)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SmallDescription)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FoodCountInCategory)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BeverageCountInCategory)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AppetizerCountInCategory)
-                </td>
-                 <td>
-                    <span class="btn btn-danger btn-sm btn-Remove" data-controller="CategoryManagement" data-action="Delete" data-id="@item.CategoryID">Delete</span>
-                </td>
-                <td>
-                    <span class="btn btn-primary btn-sm btn-update" data-controller="CategoryManagement" data-action="Update" data-id="@item.CategoryID">Update</span>
-                </td>> 
-            </tr>
-        }
-    </tbody>
+<table class="table table-bordered table-hover table-striped">
+	<thead>
+		<tr>
+			<th>
+				Category ID
+			</th>
+			<th>
+				Category Name
+			</th>
+			<th>
+				slug
+			</th>
+			<th>
+				Small Description
+			</th>
+			<th>
+				Food count
+			</th>
+			<th>
+				Beverages count
+			</th>
+			<th>
+				Appetizer count
+			</th>
+			<th>
+				Delete
+			</th>
+			<th>
+				Update
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr id="tr-@item.CategoryID">
+				<td>
+					@Html.DisplayFor(modelItem => item.CategoryID)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CategoryName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Slug)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.SmallDescription)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.FoodCountInCategory)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.BeverageCountInCategory)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.AppetizerCountInCategory)
+				</td>
+				<td>
+					<span class="btn btn-danger btn-sm btn-Remove" data-controller="CategoryManagement" data-action="Delete" data-id="@item.CategoryID">Delete</span>
+				</td>
+				<td>
+					<span class="btn btn-primary btn-sm btn-update" data-controller="CategoryManagement" data-action="Update" data-id="@item.CategoryID">Update</span>
+				</td>>
+			</tr>
+		}
+	</tbody>
 </table>

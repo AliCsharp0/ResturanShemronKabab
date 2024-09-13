@@ -1,5 +1,6 @@
 ﻿using FrameWork.DTOS;
 using Restaurant.DomainModel.ApplicationModel.Appetizer;
+using Restaurant.DomainModel.ApplicationModel.Food;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,9 @@ namespace Restaurant.ApplicationServiceContract.Services
         List<AppetizerListItem> Search(AppetizerSearchModel searchModel , out int RecordCount);
 
         List<AppetizerListItem> GetAllListItem();
+
+		List<AppetizerListItemUI> GetAllListItemInUI();
+
 
 
 	}

@@ -10,7 +10,7 @@ namespace Restaurant.DomainModel.ApplicationModel.Beverages
 {
     public class BeveragesSearchModel : PageModel2
     {
-        public int? BeveragesID { get; set; }
+        public int? CategoryID { get; set; }
 
         public string? BeveragesName { get; set; }
 

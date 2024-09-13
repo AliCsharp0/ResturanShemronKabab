@@ -1,5 +1,6 @@
 ﻿using FrameWork.DTOS;
 using Restaurant.DomainModel.ApplicationModel.Employee;
+using Restaurant.DomainModel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,8 @@ namespace Restaurant.ApplicationServiceContract.Services
 
         List<EmployeeListItem> GetAllListItem();
 
-	}
+        public bool Login(string userName, string password);
+
+
+    }
 }

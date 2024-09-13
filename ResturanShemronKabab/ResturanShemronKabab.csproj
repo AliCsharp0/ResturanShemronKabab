@@ -17,6 +17,8 @@
     <ProjectReference Include="..\Restaurant.Application\Restaurant.Application.csproj" />
     <ProjectReference Include="..\Restaurant.Bootstrap\Restaurant.Bootstrap.csproj" />
     <ProjectReference Include="..\Restaurant.DomainModel\Restaurant.DomainModel.csproj" />
+    <ProjectReference Include="..\Security.BootStrap\Security.BootStrap.csproj" />
+    <ProjectReference Include="..\Security.Domain\Security.Domain.csproj" />
   </ItemGroup>
 
 </Project>

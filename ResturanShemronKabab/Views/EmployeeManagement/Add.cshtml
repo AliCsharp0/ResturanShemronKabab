@@ -5,62 +5,61 @@
 <h4>EmployeeAddAndEditModel</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form id="frmAddEmployee">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>  
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Age" class="control-label"></label>
-                <input asp-for="Age" class="form-control" />
-                <span asp-validation-for="Age" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mobile" class="control-label"></label>
-                <input asp-for="Mobile" class="form-control" />
-                <span asp-validation-for="Mobile" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TelHome" class="control-label"></label>
-                <input asp-for="TelHome" class="form-control" />
-                <span asp-validation-for="TelHome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Rights" class="control-label"></label>
-                <input asp-for="Rights" class="form-control" />
-                <span asp-validation-for="Rights" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateRecruitment" class="control-label"></label>
-                <input asp-for="DateRecruitment" class="form-control" />
-                <span asp-validation-for="DateRecruitment" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <span type="submit" class="btn btn-success saveAdd" data-action="Add" data-controller="EmployeeManagement" data-form-id="frmAddEmployee">Add</span>
-            </div>
-        </form>
-    </div>
+	<div class="col-md-4">
+		<form id="frmAddEmployee">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="FirstName" class="control-label"></label>
+				<input asp-for="FirstName" class="form-control" type="text" placeholder="First Name"  id="Name" data-Err-Name="spnErrName" data-msg="Enter your First Name correctly" oninput="ValidationName(this)" />
+				<span class="text-danger" id="spnErrName"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="LastName" class="control-label"></label>
+				<input asp-for="LastName" class="form-control" type="text" placeholder="Last Name" id="Last" data-Err-Last="spnErrLast" data-msg="Enter your  Last Name correctly" oninput="ValidationLast(this)" />
+				<span class="text-danger" id="spnErrLast"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="UserName" class="control-label"></label>
+				<input asp-for="UserName" class="form-control" type="text" placeholder="UserName" id="UserName" data-Err-userName="spnErrUserName" oninput="ValidationUserName(this)" />
+				<span class="text-danger" id="spnErrUserName"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Password" class="control-label"></label>
+				<input asp-for="Password" class="form-control" type="text" placeholder="Password" id="Password" data-Err-Password="spnErrorPassword" oninput="ValidationPassword(this)" />
+				<span class="text-danger" id="spnErrorPassword"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Age" class="control-label"></label>
+				<input asp-for="Age" class="form-control" type="text" placeholder="Age"  id="Age" data-Err-Age="spnErrorAge" oninput="ValidationAge(this)" />
+				<span class="text-danger" id="spnErrorAge"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Address" class="control-label"></label>
+				<input asp-for="Address" class="form-control" type="text" placeholder="Address" id="Address" data-Err-Address="spnErrAddress" oninput="ValidationAddress(this)"/>
+				<span class="text-danger" id="spnErrAddress"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Mobile" class="control-label"></label>
+				<input asp-for="Mobile" class="form-control" type="text" placeholder="Mobile"  id="Mobile" data-Err-Mobile="spnErrMobile" oninput="ValidationMobile(this)" />
+				<span class="text-danger" id="spnErrMobile"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="TelHome" class="control-label"></label>
+				<input asp-for="TelHome" class="form-control" type="text" placeholder="Tel Home" id="TelHome" data-Err-TelHome="spnErrTelHome" oninput="ValidationTelHome(this)" />
+				<span class="text-danger" id="spnErrTelHome"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Rights" class="control-label"></label>
+				<input asp-for="Rights" class="form-control" type="text" placeholder="Rights" id="Rights" data-Err-Rights="spnErrRights" oninput="ValidationRights(this)" />
+				<span class="text-danger" id="spnErrRights"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="DateRecruitment" class="control-label"></label>
+				<input asp-for="DateRecruitment" class="form-control" />
+			</div>
+			<div class="form-group">
+				<span type="submit" class="btn btn-success saveAdd" data-action="Add" data-controller="EmployeeManagement" data-form-id="frmAddEmployee">Add</span>
+			</div>
+		</form>
+	</div>
 </div>

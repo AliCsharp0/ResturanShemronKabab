@@ -1,8 +1,25 @@
-﻿
-<span class="btn btn-success btn-add" data-controller="CategoryManagement" data-action="Add">Add New</span>
+﻿@model Restaurant.DomainModel.ApplicationModel.Category.CategorySearchModel
+<form asp-controller="CategoryManagement" asp-action="Index" method="get" id="frmSearch">
+	<table class="table table-hover table-striped table-sm">
+		<tr>
+			<td>
+				<label asp-for="CategoryName" class="form-control"></label>
+				<input type="text" class="form-control" asp-for="CategoryName" />
+			</td>
+		</tr>
+		<tr class="text-center">
+			<td colspan="2">
+				<span class="btn btn-primary btn-sm spnSearch" data-controller="CategoryManagement" data-action="Search">Search</span>
+				@Html.ActionLink("RemoveFilter", "Index", "CategoryManagement", null, new { @class = "btn btn-danger btn-sm" })
+			</td>
+		</tr>
+	</table>
+</form>
 
+<span class="btn btn-success btn-sm btn-add" data-controller="CategoryManagement" data-action="Add">Add New</span>
 
-<div id="dvContent" data-controller="CategoryManagement" data-action="List" data-search-form="frmSearch"></div>
+<div id="dvContent" data-controller="CategoryManagement" data-action="List" data-search-form="frmSearch">
+</div>
 
 
 

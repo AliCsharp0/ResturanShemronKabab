@@ -17,7 +17,7 @@ namespace Restaurant.DomainModel.Models.Configurations
 
             builder.Property(x => x.UnitPrice).IsRequired();
 
-            builder.Property(x => x.Image).IsRequired().HasMaxLength(38);
+            builder.Property(x => x.ImageURL).IsRequired().HasMaxLength(300);
 
             builder.HasMany(x=>x.orderDetails).WithOne(x=>x.beverage).HasForeignKey(x=>x.BeveragesID).OnDelete(DeleteBehavior.NoAction);
         }

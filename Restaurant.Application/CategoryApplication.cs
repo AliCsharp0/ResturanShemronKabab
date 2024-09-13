@@ -37,6 +37,7 @@ namespace Restaurant.Application
             };
             return category;
         }
+
         private CategoryAddAndEditModel ToAddEditModel(Category category)
         {
             CategoryAddAndEditModel categoryAddAndEditModel = new CategoryAddAndEditModel
@@ -61,7 +62,6 @@ namespace Restaurant.Application
             return CatRepo.GetDrp();
 		}
 
-
 		public OperationResult Register(CategoryAddAndEditModel category)
         {
             if (CatRepo.ExistCategoryName(category.CategoryName))
@@ -85,11 +85,14 @@ namespace Restaurant.Application
 
         public OperationResult Update(CategoryAddAndEditModel category)
         {
-            Category Cat = ToModel(category);
-
-            return CatRepo.Update(Cat);
+            if(CatRepo.ExistCategoryNameInUpdate(category.CategoryName , category.CategoryID))
+            {
+                return new OperationResult("Update Category").ToFail("Duplicate Category Name");
+            }
+            var Cat = ToModel(category);
+            var OperationCategory = CatRepo.Update(Cat);
+            return OperationCategory;
         }
-
         public List<Category> GetAll()
         {
             return CatRepo.GetAll();

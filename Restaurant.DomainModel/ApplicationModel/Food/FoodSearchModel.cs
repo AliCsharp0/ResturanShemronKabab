@@ -10,9 +10,9 @@ namespace Restaurant.DomainModel.ApplicationModel.Food
 {
     public class FoodSearchModel : PageModel2
     {
-        public int? FoodID { get; set; }
-
         public string? FoodName { get; set; }
+
+        public int? CategoryID { get; set; }
 
         public int? UnitPriceFrom { get; set; }
 

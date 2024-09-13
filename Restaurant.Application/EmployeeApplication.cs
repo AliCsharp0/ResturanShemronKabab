@@ -93,6 +93,18 @@ namespace Restaurant.Application
 
         public OperationResult Update(EmployeeAddAndEditModel employee)
         {
+            if (EmpRepo.ExistMobileNumberInUpdate(employee.EmployeeID, employee.Mobile))
+            {
+                return new OperationResult("Update Customer ").ToFail("Duplicate Mobile");
+            }
+            if (EmpRepo.ExistNameInUpdate(employee.EmployeeID, employee.FirstName, employee.LastName))
+            {
+                return new OperationResult("Update Customer").ToFail("Duplicate Name");
+            }
+            if (EmpRepo.ExistUserNameInUpdate(employee.EmployeeID, employee.UserName))
+            {
+                return new OperationResult("Update User Name").ToFail("Duplicate User Name");
+            }
             Employee emp = ToModel(employee);
             return EmpRepo.Update(emp);
         }
@@ -101,5 +113,15 @@ namespace Restaurant.Application
         {
             return EmpRepo.GetAllListItem();
         }
+
+		public bool Login(string userName, string password)
+		{
+			if(EmpRepo.ExistLogin(userName, password))
+            {
+                return true;
+            }
+            return false;
+		}
+
     }
 }

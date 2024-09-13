@@ -28,9 +28,10 @@ namespace Restaurant.Application
                 FoodID = FoodAddEdit.FoodID,
                 FoodName = FoodAddEdit.FoodName,
                 CategoryID = FoodAddEdit.CategoryID,
-                Image = FoodAddEdit.Image,
+                ImageURL = FoodAddEdit.ImageURL,
                 Materials = FoodAddEdit.Materials,
                 UnitPrice = FoodAddEdit.UnitPrice,
+                
             };
             return food;
         }
@@ -42,7 +43,7 @@ namespace Restaurant.Application
                 FoodID =food.FoodID,
                 FoodName = food.FoodName,
                 CategoryID = food.CategoryID,
-                Image = food.Image,
+                ImageURL = food.ImageURL,
                 Materials = food.Materials,
                 UnitPrice = food.UnitPrice,
             };
@@ -60,11 +61,15 @@ namespace Restaurant.Application
             {
                 return new OperationResult("Register Food").ToFail("Duplicate Food Name");
             }
-            if (FoodRepo.ExistMaterials(food.Materials))
+            if(FoodRepo.ExistImage(food.ImageURL))
             {
-                return new OperationResult("Register Food").ToFail("Duplicate Food Materials");
-            }
-            Food f = ToModel(food);
+				return new OperationResult("Register Food").ToFail("Duplicate Food Image");
+			}
+			if (food.CategoryID < 0)
+			{
+				return new OperationResult("Register Appetizer").ToFail("Duplicate Category Name");
+			}
+			Food f = ToModel(food);
             var OperationFood = FoodRepo.Register(f);
             return OperationFood;
         }
@@ -85,13 +90,30 @@ namespace Restaurant.Application
 
         public OperationResult Update(FoodAddAndEditModel food)
         {
-            Food f = ToModel(food);
+            if(FoodRepo.ExistNameInUpdate(food.FoodID , food.FoodName))
+            {
+				return new OperationResult("Update Food").ToFail("Duplicate Food Name");
+			}
+            if(FoodRepo.ExistImageInUpdate(food.FoodID , food.ImageURL))
+            {
+				return new OperationResult("Update Food").ToFail("Duplicate Food Image");
+			}
+			if (food.CategoryID < 0)
+			{
+				return new OperationResult("Register Appetizer").ToFail("Duplicate Category Name");
+			}
+			Food f = ToModel(food);
             return FoodRepo.Update(f);
         }
 
         public List<FoodListItem> GetAllListItem()
         {
             return FoodRepo.GetAllListItem();
+        }
+
+		public List<FoodListItemUI> GetAllListItemInUI()
+		{
+            return FoodRepo.GetAllListItemInUI();
         }
 	}
 }

@@ -20,6 +20,6 @@ namespace Restaurant.DomainModel.ApplicationModel.Appetizer
 
         public string SmallDescription { get; set; }
 
-        public string Image { get; set; }
+        public string ImageURL { get; set; }
     }
 }

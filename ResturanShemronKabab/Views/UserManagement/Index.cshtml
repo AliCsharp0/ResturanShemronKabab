@@ -1,0 +1,40 @@
+﻿@model Restaurant.DomainModel.ApplicationModel.User.UserSearchModel
+<form asp-controller="UserManagement" asp-action="Index" method="get" id="frmSearch">
+	<table class="table table-hover table-striped table-sm">
+		<tr>
+			<td>
+				<label asp-for="FirstName" class="form-control"></label>
+				<input type="text" class="form-control" asp-for="FirstName" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label asp-for="LastName" class="form-control"></label>
+				<input type="text" class="form-control" asp-for="LastName" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label asp-for="UserName" class="form-control"></label>
+				<input type="text" class="form-control" asp-for="UserName" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label asp-for="Mobile" class="form-control"></label>
+				<input type="text" class="form-control" asp-for="Mobile" />
+			</td>
+		</tr>
+		<tr class="text-center">
+			<td colspan="2">
+				<span class="btn btn-primary btn-sm spnSearch" data-controller="UserManagement" data-action="Search">Search</span>
+				@Html.ActionLink("RemoveFilter", "Index", "UserManagement", null, new { @class = "btn btn-danger btn-sm" })
+			</td>
+		</tr>
+	</table>
+</form>
+
+<span class="btn btn-success btn-sm btn-add" data-controller="UserManagement" data-action="Add">Add New</span>
+
+<div id="dvContent" data-controller="UserManagement" data-action="List" data-search-form="frmSearch"></div>
+

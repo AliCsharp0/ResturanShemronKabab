@@ -1,0 +1,17 @@
+﻿@{
+	Layout = null;
+}
+@model IEnumerable<Restaurant.DomainModel.ApplicationModel.Food.FoodListItemUI>
+<div class="ContainerAll">
+		@foreach (var item in Model)
+		{
+			<div class="ContainerOne">
+				<div class="ListBox">
+					<img src='@Url.Content(@item.Image)' />
+					<h1>@Html.DisplayFor(modelItem => item.FoodName)</h1>
+					<p>@Html.DisplayFor(modelItem => item.UnitPrice)</p>
+					<p class="TextTooman">تومان</p>
+				</div>
+			</div>
+		}
+</div>

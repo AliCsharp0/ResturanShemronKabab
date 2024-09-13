@@ -13,12 +13,14 @@ namespace Restaurant.DataAccessServiceContract.Repositories
     {
         bool ExistFoodName(string FoodName);
 
-        bool ExistMaterials(string MaterialName);
-
         bool ExistImage(string Image);
 
         bool HasRelatedOrders(int FoodID);//دارای سفارش مرتبط
 
+		List<FoodListItemUI> GetAllListItemInUI();
 
+		bool ExistNameInUpdate(int ID, string foodName);
+
+        bool ExistImageInUpdate(int ID, string Image);
 	}
 }

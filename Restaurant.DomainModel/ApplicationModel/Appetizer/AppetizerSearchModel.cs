@@ -10,7 +10,7 @@ namespace Restaurant.DomainModel.ApplicationModel.Appetizer
 {
     public class AppetizerSearchModel : PageModel2
     {
-        public int? AppetizerID { get; set; }
+        public int? CategoryID { get; set; }
 
         public string? AppetizerName { get; set; }
 

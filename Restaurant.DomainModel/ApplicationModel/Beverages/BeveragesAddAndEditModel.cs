@@ -17,6 +17,6 @@ namespace Restaurant.DomainModel.ApplicationModel.Beverages
 
         public int UnitPrice { get; set; }
 
-        public string Image { get; set; }
+        public string ImageURL { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model Restaurant.DomainModel.ApplicationModel.Beverages.BeveragesAddAndEditModel
+﻿@* @model Restaurant.DomainModel.ApplicationModel.Beverages.BeveragesAddAndEditModel *@
+@model ResturanShemronKabab.ViewModel.BeveragesAddEditViewModel
 @{
 	Layout = null;
 	SelectList categoryDropDown = (SelectList)ViewBag.categoryDropDown;
@@ -6,7 +7,7 @@
 <h4>Add Beverages </h4>
 <div class="row">
 	<div class="col-md-4">
-		<form id="frmAddBeverages">
+		<form asp-action="Add" asp-controller="BeveragesManagement" method="post" enctype="multipart/form-data">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<div class="form-group">
 				<label for="CategoryID">Category</label>
@@ -14,21 +15,20 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="BeveragesName" class="control-label"></label>
-				<input asp-for="BeveragesName" class="form-control" />
-				<span asp-validation-for="BeveragesName" class="text-danger"></span>
+				<input asp-for="BeveragesName" class="form-control" type="text" placeholder="Beverages Name" id="Name" data-Err-Name="spnErrName" data-msg="Enter your Beverages Name correctly" oninput="ValidationName(this)" />
+				<span class="text-danger" id="spnErrName"></span>
 			</div>
 			<div class="form-group">
 				<label asp-for="UnitPrice" class="control-label"></label>
-				<input asp-for="UnitPrice" class="form-control" />
-				<span asp-validation-for="UnitPrice" class="text-danger"></span>
+				<input asp-for="UnitPrice" class="form-control" type="text" placeholder="UnitPrice" id="UnitPrice" data-Err-UnitPrice="spnErrUnitPrice" data-msg="Enter your UnitPrice correctly" oninput="ValidationUnitPrice(this)" />
+				<span class="text-danger" id="spnErrUnitPrice"></span>
 			</div>
 			<div class="form-group">
-				<label asp-for="Image" class="control-label"></label>
-				<input asp-for="Image" class="form-control" />
-				<span asp-validation-for="Image" class="text-danger"></span>
+				<span>Picture</span>
+				<input type="file" name="Picture" id="Picture" value="" />
 			</div>
 			<div class="form-group">
-				<span type="submit" class="btn btn-success saveAdd" data-action="Add" data-controller="BeveragesManagement" data-form-id="frmAddBeverages">Add</span>
+				<input type="submit" value="Create" class="btn btn-primery" />
 			</div>
 		</form>
 	</div>

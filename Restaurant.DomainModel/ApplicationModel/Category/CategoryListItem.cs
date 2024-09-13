@@ -22,6 +22,5 @@ namespace Restaurant.DomainModel.ApplicationModel.Category
         public int BeverageCountInCategory { get; set; }
 
         public string Slug { get; set; }
-
     }
 }

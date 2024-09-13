@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FramWork\FrameWork.csproj" />
     <ProjectReference Include="..\Restaurant.DomainModel\Restaurant.DomainModel.csproj" />
+    <ProjectReference Include="..\Security.Domain\Security.Domain.csproj" />
   </ItemGroup>
 
 </Project>

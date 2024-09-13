@@ -10,6 +10,7 @@
     <ProjectReference Include="..\Restaurant.ApplicationServiceContract\Restaurant.ApplicationServiceContract.csproj" />
     <ProjectReference Include="..\Restaurant.DataAccessServiceContract\Restaurant.DataAccessServiceContract.csproj" />
     <ProjectReference Include="..\Restaurant.DomainModel\Restaurant.DomainModel.csproj" />
+    <ProjectReference Include="..\Security.DataAccessServiceContract\Security.DataAccessServiceContract.csproj" />
   </ItemGroup>
 
 </Project>

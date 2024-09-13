@@ -2,8 +2,8 @@
 <form asp-controller="EmployeeManagement" asp-action="Index" method="get" id="frmSearch">
     <table class="table table-bordered table-hover table-striped table-sm">
         <tr>
-            <label asp-for="Age" class="form-control"></label>
-            <td>
+			<td>
+				<label asp-for="Age" class="form-control"></label>
                 <input type="text" class="form-control" asp-for="Age" />
             </td>
         </tr>
@@ -46,18 +46,3 @@
 
 <div id="dvContent" data-controller="EmployeeManagement" data-action="List" data-search-form="frmSearch">
 </div>
-
-@* @section Scripts
-{
-    <script>
-        $(document).on("click", ".spnSearch", function () {
-
-            var sendingData = $("#frmSearch").serialize();  // اطلاعات فرم را سریالایز می‌کند.
-            var sendingUrl = "@Url.Action("Search", "EmployeeManagement")";
-
-            $.get(sendingUrl, sendingData, function (partialSearch) {
-                $("#dvContent").html(partialSearch);
-            });
-        });
-    </script>
-} *@

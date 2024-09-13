@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FrameWork.DTOS;
+using Microsoft.AspNetCore.Mvc;
 using Restaurant.ApplicationServiceContract.Services;
 using Restaurant.DomainModel.ApplicationModel.Employee;
+using ResturanShemronKabab.Helper;
 
 namespace ResturanShemronKabab.Controllers
 {
     public class EmployeeManagementController : Controller
     {
         private readonly IEmployeeApplication employeeApplication;
+        private readonly IWebHostEnvironment env;
 
-        public EmployeeManagementController(IEmployeeApplication employeeApplication)
+        public EmployeeManagementController(IEmployeeApplication employeeApplication, IWebHostEnvironment env)
         {
             this.employeeApplication = employeeApplication;
+            this.env = env;
         }
         public IActionResult Index(EmployeeSearchModel sm)
         {
@@ -58,6 +62,5 @@ namespace ResturanShemronKabab.Controllers
             var emp = employeeApplication.Search(sm, out var recordCount);
             return PartialView("List", emp);
         }
-
     }
 }

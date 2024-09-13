@@ -1,5 +1,6 @@
 ﻿using FrameWork.DTOS;
 using Restaurant.DataAccessServiceContract.Repositories;
+using Restaurant.DomainModel.ApplicationModel.Appetizer;
 using Restaurant.DomainModel.ApplicationModel.Beverages;
 using Restaurant.DomainModel.Models;
 using Restaurant.DomainModel.Models.Configurations;
@@ -27,7 +28,7 @@ namespace DataAccess.Restaurant.EF
 
         public bool ExistImage(string Image)
         {
-            return db.Beverages.Any(x => x.Image == Image);
+            return db.Beverages.Any(x => x.ImageURL == Image);
         }
 
         public Beverages Get(int ID)
@@ -47,13 +48,25 @@ namespace DataAccess.Restaurant.EF
                 BeveragesID = x.BeveragesID,
                 BeveragesName = x.BeveragesName,
                 CategoryName = x.category.CategoryName,
-                Image = x.Image,
+                Image = x.ImageURL,
                 UnitPrice = x.UnitPrice,
             }).ToList();
             return beverages;
         }
 
-        public bool HasRelatedOrders(int BeveragesID)
+		public List<BeveragesListItemUI> GetAllListItemInUI()
+		{
+			var beverages = db.Beverages.Select(x => new BeveragesListItemUI
+			{
+				BeveragesID = x.BeveragesID,
+                BeveragesName = x.BeveragesName,
+                UnitPrice = x.UnitPrice,
+				Image = x.ImageURL,
+			}).ToList();
+			return beverages;
+		}
+
+		public bool HasRelatedOrders(int BeveragesID)
         {
             return Get(BeveragesID).orderDetails.Any();
         }
@@ -96,11 +109,11 @@ namespace DataAccess.Restaurant.EF
                 searchModel.PageSize = 5;
             }
             var q = from beverages in db.Beverages select beverages;
-            if (searchModel.BeveragesID != null)
+            if(searchModel.CategoryID != null && searchModel.CategoryID > 0 )
             {
-                q = q.Where(x => x.BeveragesID == searchModel.BeveragesID);
+                q = q.Where(x => x.CategoryID == searchModel.CategoryID);
             }
-            if (!string.IsNullOrEmpty(searchModel.BeveragesName))
+			if (!string.IsNullOrEmpty(searchModel.BeveragesName))
             {
                 q = q.Where(x => x.BeveragesName == searchModel.BeveragesName);
             }
@@ -120,7 +133,7 @@ namespace DataAccess.Restaurant.EF
                          BeveragesID = beverages.BeveragesID,
                          BeveragesName = beverages.BeveragesName,
                          CategoryName = beverages.category.CategoryName,
-                         Image = beverages.Image,
+                         Image = beverages.ImageURL,
                          UnitPrice = beverages.UnitPrice,
                      };
             return q2.ToList();
@@ -140,6 +153,16 @@ namespace DataAccess.Restaurant.EF
             {
                 return op.ToFail("Update Beverages Failed");
             }
+        }
+
+        public bool ExistImageInUpdate(int ID, string Image)
+        {
+            return db.Appetizers.Any(x => x.AppetizerID != ID && x.ImageURL == Image);
+        }
+
+        public bool ExistNameInUpdate(int ID, string Name)
+        {
+            return db.Appetizers.Any(x => x.AppetizerID != ID && x.AppetizerName == Name);
         }
     }
 }

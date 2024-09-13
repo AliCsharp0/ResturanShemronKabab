@@ -14,7 +14,7 @@ namespace Restaurant.DataAccessServiceContract.Repositories
     {
         bool ExistCategoryName(string CategoryName);
 
-        bool ExistCategoryName(string CategoryName, int CategoryID);
+        bool ExistCategoryNameInUpdate(string CategoryName, int CategoryID);
 
         Task<bool> HasChild(int ID);
 

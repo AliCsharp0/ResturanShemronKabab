@@ -23,6 +23,6 @@ namespace Restaurant.ApplicationServiceContract.Services
 
          List<FoodListItem> GetAllListItem();
 
-
+		List<FoodListItemUI> GetAllListItemInUI();
 	}
 }
