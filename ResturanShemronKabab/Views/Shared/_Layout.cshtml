@@ -173,66 +173,23 @@
 				}
 			});
 
-			//DeleteImage
-			$(document).on("click", ".btn-RemoveImage", function () {
-				if (confirm("آیا مطمن هستید")) {
-					let action = $(this).attr("data-action");
-					let controller = $(this).attr("data-controller");
-					let id = $(this).attr("data-id");
-					let sendingUrl = `/${controller}/${action}`;
-					let sendingData = `id=${id}`;
-					//$(".waiting").css("display", "flex");
-					$.post(sendingUrl, sendingData, function (operationResult) {
-						if (operationResult.success.toString() == "true") {
-							BindGrid();
-							SuccessMessage(operationResult.message);
-						}
-						else {
-							ErrorMessage(operationResult.message);
-						}
+			//Delete Image
+			function DeleteImage(FoodID) {
+				debugger;
+				$.post("/FoodManagement/DeleteImage", { foodID: FoodID }, function (op) {
+					if (op.success) {
+						let action = "List";
+						let controller = "FoodManagement";
+						let sendingUrl = `/${controller}/${action}`;
 
-					});
-				}
-			});
-			// function DeleteImage(FoodID) {
-			// 	debugger;
-			// 	$.post("/FoodManagement/DeleteImage", { foodID: FoodID }, function (op) {
-			// 		let action = "List";
-			// 		let controller = "FoodManagement";
-			// 		let sendingUrl = `/${controller}/${action}`;
-			// 		$.get(sendingUrl, null, function (recevingData) {
-			// 			$("dvContent").html(recevingData);
-			// 			BindGrid();
-			// 		});
-			// 	});
-			// }
-
-
-
-			// //add image
-			// $(document).ready(function () {
-			// 	$('#frmAddFood').submit(function (event) {
-			// 		event.preventDefault(); // جلوگیری از ارسال فرم به صورت عادی
-
-			// 		var formData = new FormData(this);
-
-			// 		$.ajax({
-			// 			url: '@Url.Action("Add", "FoodManagement")',
-			// 			type: 'POST',
-			// 			data: formData,
-			// 			contentType: false,
-			// 			processData: false,
-			// 			success: function (response) {
-			// 				// نمایش پیام موفقیت یا انجام عملیات دیگر
-			// 				alert('Food added successfully!');
-			// 			},
-			// 			error: function (xhr, status, error) {
-			// 				// نمایش پیام خطا یا انجام عملیات دیگر
-			// 				alert('Error: ' + error);
-			// 			}
-			// 		});
-			// 	});
-			// });
+						$.get(sendingUrl, null, function (receivingData) {
+							$("#dvContent").html(receivingData);
+						});
+					} else {
+						alert(op.message);
+					}
+				});
+			}
 
 
 

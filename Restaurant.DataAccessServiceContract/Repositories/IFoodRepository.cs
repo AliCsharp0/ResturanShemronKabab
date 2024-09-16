@@ -26,6 +26,6 @@ namespace Restaurant.DataAccessServiceContract.Repositories
 
         //void RemoveImage (int foodID);  
 
-        OperationResult RemoveImage (int foodID);
+        void RemoveImage (int foodID);
     }
 }

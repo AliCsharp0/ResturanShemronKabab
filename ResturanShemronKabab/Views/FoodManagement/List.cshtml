@@ -33,9 +33,10 @@
                 <td>
                     <img src='@Url.Content(@item.Image)' width="100" />
                 </td>
-                <td >
-					<span class="btn btn-warning btn-sm btn-RemoveImage" data-controller="FoodManagement" data-action="DeleteImage" data-id="@item.FoodID">Delete Image</span>
+                <td>
+                    <span class="btn btn-warning btn-sm" onclick="DeleteImage('@item.FoodID')">Delete Image</span>
                 </td>
+
                 <td>
                     @Html.ActionLink("Update","Update",new{FoodID=item.FoodID},new{@class="btn btn-primary btn-sm"})
                 </td>

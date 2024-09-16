@@ -49,7 +49,6 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<CustomAuthenticator>();
-builder.Services.AddScoped<ResturanShemronKabab.Framwork.UI.Services.IFileManager>();
 
 var app = builder.Build();
 

@@ -25,9 +25,6 @@ namespace Restaurant.ApplicationServiceContract.Services
 
 		List<FoodListItemUI> GetAllListItemInUI();
 
-        OperationResult RemoveImage(int foodID);
-        //void RemoveImage(int foodID);
-
-        //void ChangeFoodImage(int foodId, string newImagePath);
+        void RemoveImage(int foodID);
     }
 }

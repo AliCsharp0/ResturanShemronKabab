@@ -117,9 +117,9 @@ namespace Restaurant.Application
             return FoodRepo.GetAllListItemInUI();
         }
 
-        public OperationResult RemoveImage(int foodID)
+        public void RemoveImage(int foodID)
         {
-            return FoodRepo.RemoveImage(foodID);
+             FoodRepo.RemoveImage(foodID);
         }
     }
 }

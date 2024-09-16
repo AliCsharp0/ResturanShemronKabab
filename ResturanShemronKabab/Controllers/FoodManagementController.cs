@@ -113,46 +113,32 @@ namespace ResturanShemronKabab.Controllers
 			return PartialView("List", food);
 		}
 
-        //[HttpPost]
-        //public IActionResult DeleteImage(int foodID)
-        //{
-        //	var n = foodRepository.Get(foodID);
-        //	if (!string.IsNullOrEmpty(n.ImageURL) && n.ImageURL.ToLower() != @"~/images/noimage.png")
-        //	{
-        //		var url = env.ContentRootPath + @"\wwwroot" + n.ImageURL.Substring(1).Replace(@"/", @"\");
-        //		if (System.IO.File.Exists(url))
-        //		{
-        //			System.IO.File.Delete(url);
-        //		}
-        //	}
-        //	OperationResult op = new OperationResult("Delete Image ");
-        //	try
-        //	{
-        //		foodRepository.RemoveImage(foodID);
-        //		return Json(op.ToSuccess("Delete Image Success Fully"));
-        //	}
-        //	catch (Exception ex)
-        //	{
-        //		return Json(op.ToFail("Delete Image Failed"));
-        //	}
-        //}
-        [HttpPost]
-        public IActionResult DeleteImage(int foodID)
-        {
-            var n = foodApplication.Get(foodID);
-            if (!string.IsNullOrEmpty(n.ImageURL) && n.ImageURL.ToLower() != @"~/images/noimage.png")
-            {
-                var url = env.ContentRootPath + @"\wwwroot" + n.ImageURL.Substring(1).Replace(@"/", @"\");
-                if (System.IO.File.Exists(url))
-                {
-                    System.IO.File.Delete(url);
-                }
-            }
-              var op = foodApplication.RemoveImage(foodID);
-                return Json(op);
-        }
+		[HttpPost]
+		public JsonResult DeleteImage(int foodID)
+		{
+			var n = foodApplication.Get(foodID);
+			if (n != null && !string.IsNullOrEmpty(n.ImageURL) && n.ImageURL.ToLower() != @"~/images/noimage.png")
+			{
+				var url = Path.Combine(env.ContentRootPath, "wwwroot", n.ImageURL.Substring(1).Replace("/", "\\"));
+				if (System.IO.File.Exists(url))
+				{
+					System.IO.File.Delete(url);
+				}
+			}
+			OperationResult op = new OperationResult("Delete Image");
+			try
+			{
+				foodApplication.RemoveImage(foodID);
+				return Json(op.ToSuccess("Image Removed"));
+			}
+			catch (Exception)
+			{
+				return Json(op.ToFail("Image did not Removed"));
+			}
+		}
 
-        public IActionResult Update(int foodID)
+
+		public IActionResult Update(int foodID)
 		{
 			var n = foodRepository.Get(foodID);
 			InflateCategoryDrp();
@@ -203,56 +189,39 @@ namespace ResturanShemronKabab.Controllers
 					}
 				}
 
-				if (!news.Picture.FileName.ChekFileName())
-				{
-					TempData["ErrorMessage"] = "Invalid FileName";
-					await InflateCategories();
-					return View(news);
-				}
-				if (news.Picture.Length < 2048 || news.Picture.Length > 2097152)
-				{
-					TempData["ErrorMessage"] = "Invalid File Size";
-					await InflateCategories();
-					return View(news);
-				}
-				string PhisycalAddress = Path.GetFileName(news.Picture.FileName).ToUniqueFileName();
+				//if (!model.Picture.FileName.ChekFileName())
+				//{
+				//	TempData["ErrorMessage"] = "Invalid FileName";
+				//	await InflateCategories();
+				//	return View(news);
+				//}
+				//if (news.Picture.Length < 2048 || news.Picture.Length > 2097152)
+				//{
+				//	TempData["ErrorMessage"] = "Invalid File Size";
+				//	await InflateCategories();
+				//	return View(news);
+				//}
+				string PhisycalAddress = Path.GetFileName(model.Picture.FileName).ToUniqueFileName();
 				string Relativeaddress = @"~/NewsImage/" + PhisycalAddress;
 				PhisycalAddress = env.ContentRootPath + @"\wwwroot\NewsImage\" + PhisycalAddress;
 				FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
 				{
-					await news.Picture.CopyToAsync(fs);
+					 model.Picture.CopyToAsync(fs);
 					fs.Close();
 				};
-				DomainModel.ViewModel.Newes.NewsAddEditModel n = new NewsAddEditModel
+				FoodAddAndEditModel n = new FoodAddAndEditModel
 				{
-					ImageUrl = Relativeaddress
-					,
-					NewsCategoryID = news.NewsCategoryID
-					,
-					NewsText = news.NewsText
-					,
-					NewsTitle = news.NewsTitle
-					,
-					RegistrationDate = DateTime.Now
-					,
-					Slug = news.Slug
-					,
-					SmallDescription = news.SmallDescription
-					,
-					SortOrder = news.SortOrder
-					,
-					VisitCount = news.VisitCount
-					,
-					VoteCount = news.VoteCount
-					,
-					VoteSumation = news.VoteSumation
-
+					ImageURL = Relativeaddress,
+					FoodName = model.FoodName,
+					CategoryID = model.CategoryID,
+					Materials = model.Materials,
+					UnitPrice = model.UnitPrice,
 				};
-				var op = await newsRepo.Add(n);
+				var op =  foodApplication.Register(n);
 				if (!op.Success)
 				{
 					TempData["ErrorMessage"] = op.Message;
-					return View(news);
+					return View(model);
 				}
 				return RedirectToAction("index");
 			}

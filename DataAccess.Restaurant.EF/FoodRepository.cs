@@ -183,31 +183,14 @@ namespace DataAccess.Restaurant.EF
 			}
 		}
 
-        //public void RemoveImage(int foodID)
-        //{
-        //	var n = db.Foods.FirstOrDefault(x=>x.FoodID == foodID);
-        //	if (n != null && n.ImageURL != string.Empty && n.ImageURL.ToLower() != "~/images/noimage.png")
-        //	{
-        //		n.ImageURL = "~/images/noimage.png";
-        //		db.SaveChanges();
-        //	}
-        //}
-
-        public OperationResult RemoveImage(int foodID)
-        {
-			OperationResult op = new OperationResult("Remove Image");
-            var n = db.Foods.FirstOrDefault(x => x.FoodID == foodID);
-            if (n != null && n.ImageURL != string.Empty && n.ImageURL.ToLower() != "~/images/noimage.png")
-            {
-                n.ImageURL = "~/images/noimage.png";
-                db.SaveChanges();
-				return op.ToSuccess("Remove Image Success Fully");
-            }
-			else
+		public void RemoveImage(int foodID)
+		{
+			var n = db.Foods.FirstOrDefault(x => x.FoodID == foodID);
+			if (n != null && n.ImageURL != string.Empty && n.ImageURL.ToLower() != "~/images/noimage.png")
 			{
-				return op.ToFail("Remove Image Failed");
+				n.ImageURL = "~/images/noimage.png";
+				db.SaveChanges();
 			}
-        }
-
+		}
     }
 }

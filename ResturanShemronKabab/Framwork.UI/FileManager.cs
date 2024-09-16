@@ -30,26 +30,31 @@ namespace ResturanShemronKabab.Frawwork.UI
 
 		public OperationResult SaveFile(IFormFile file, string FolderName)
 		{
-			OperationResult op = new OperationResult();
-			var address = Path.GetFileName(file.FileName);
-			string uniqeFile = ToUniquieFileName(address);
-			address = ToPhysicalAddress(uniqeFile, FolderName);
-			FileStream fs = new FileStream(address, FileMode.Create);
-			try
-			{
-				file.CopyTo(fs);
-				return op.ToSuccess(uniqeFile);
-			}
-			catch (Exception ex)
-			{
-				return op.ToFail(ex.Message);
-			}
-			finally
-			{
-				fs.Close();
-				fs.Dispose();
-			}
+			throw new NotImplementedException();
 		}
+
+		//public OperationResult SaveFile(IFormFile file, string FolderName)
+		//{
+		//	OperationResult op = new OperationResult();
+		//	var address = Path.GetFileName(file.FileName);
+		//	string uniqeFile = ToUniquieFileName(address);
+		//	address = ToPhysicalAddress(uniqeFile, FolderName);
+		//	FileStream fs = new FileStream(address, FileMode.Create);
+		//	try
+		//	{
+		//		file.CopyTo(fs);
+		//		return op.ToSuccess(uniqeFile);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		return op.ToFail(ex.Message);
+		//	}
+		//	finally
+		//	{
+		//		fs.Close();
+		//		fs.Dispose();
+		//	}
+		//}
 
 		public string ToPhysicalAddress(string FileName, string FolderName)
 		{
@@ -82,15 +87,20 @@ namespace ResturanShemronKabab.Frawwork.UI
 
 		public OperationResult ValidateFileSize(IFormFile file, long MinCapacity, long MaxCapacity)
 		{
-			OperationResult op = new OperationResult();
-			if (file.Length < MinCapacity || file.Length > MaxCapacity)
-			{
-				return op.ToFail("Invalid File Size ");
-			}
-			else
-			{
-				return op.ToSuccess("File Size is Valid");
-			}
+			throw new NotImplementedException();
 		}
+
+		//public OperationResult ValidateFileSize(IFormFile file, long MinCapacity, long MaxCapacity)
+		//{
+		//	OperationResult op = new OperationResult();
+		//	if (file.Length < MinCapacity || file.Length > MaxCapacity)
+		//	{
+		//		return op.ToFail("Invalid File Size ");
+		//	}
+		//	else
+		//	{
+		//		return op.ToSuccess("File Size is Valid");
+		//	}
+		//}
 	}
 }
