@@ -22,37 +22,51 @@
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 			<div class="container-fluid">
-
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1" style=" display: flex;justify-content: end;">
+					<ul class="navbar-nav flex-grow-1" style="display: flex; justify-content: end;">
 						<li class="nav-item ContainerLoginAdmin">
-							<a href="https://localhost:7107/PageAdmin/Index" class="nav-link text-dark navLinkTopMenu " id="LoginAdmin"> 
-								<i style="margin-top:5px;margin-right:3px" class="fa fa-cog iconCog" aria-hidden="true"></i> مدریت</a>
+							<a href="https://localhost:7107/PageAdmin/Index" class="nav-link text-dark navLinkTopMenu" id="LoginAdmin">
+								<i style="margin-top:5px; margin-right:3px" class="fa fa-cog iconCog" aria-hidden="true"></i> مدیریت
+							</a>
 						</li>
 						<li class="nav-item">
-							<a href="https://localhost:7107/Account/login" class="nav-link text-dark navLinkTopMenu LoginAdmin" id="LoginMenu">ورود</a>
+							@if (User.Identity.IsAuthenticated)
+							{
+							<li class="nav-item">
+								<form method="post" asp-controller="Account" asp-action="Logout">
+									<button type="submit" class="nav-link btn btn-link">خروج</button>
+								</form>
+							</li>
+							<a href="#" class="nav-link text-dark navLinkTopMenu" style="background-color: rgb(243, 179, 26);     width: 200px; display: flex;
+                                 justify-content: center; color: white !important; border-radius: 25px;">خوش آمدید, @ViewBag.FullName</a>
+							}
+							else
+							{
+								<a href="https://localhost:7107/Account/login" class="nav-link text-dark navLinkTopMenu LoginAdmin" id="LoginMenu">ورود</a>
+							}
 						</li>
 						<li class="nav-item">
-							<a href="" class="nav-link text-dark navLinkTopMenu">صفحه اصلی </a>
+							<a href="#" class="nav-link text-dark navLinkTopMenu">صفحه اصلی</a>
 						</li>
 						<li class="nav-item">
-							<a href="" class="nav-link text-dark navLinkTopMenu">سفارش اینترنتی</a>
+							<a href="#" class="nav-link text-dark navLinkTopMenu">سفارش اینترنتی</a>
 						</li>
 						<li class="nav-item">
-							<a href="" class="nav-link text-dark navLinkTopMenu">درباره </a>
+							<a href="#" class="nav-link text-dark navLinkTopMenu">درباره</a>
 						</li>
 						<li class="nav-item">
-							<a href="" class="nav-link text-dark navLinkTopMenu">تماس با ما</a>
+							<a href="#" class="nav-link text-dark navLinkTopMenu">تماس با ما</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 	</header>
+
 
 
 

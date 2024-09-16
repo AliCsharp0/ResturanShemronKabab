@@ -1,4 +1,4 @@
-using ResturanShemronKabab.Helper;
+﻿using ResturanShemronKabab.Helper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,9 +35,21 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         o.LoginPath = new PathString("/Account/Login");
         o.LogoutPath = new PathString("/Account/Logout");
         o.AccessDeniedPath = new PathString("/Account/Login");
-    });
+		o.ExpireTimeSpan = TimeSpan.FromMinutes(1);
+		o.SlidingExpiration = false; 
+		o.Cookie.IsEssential = true; // ??????? ?? ????? ??????? ????? ?????
+		o.Cookie.HttpOnly = true; // ?????? ????? ???????
+	});
+builder.Services.AddSession(options =>
+{
+	options.IdleTimeout = TimeSpan.FromMinutes(1); // ????? ???? ?????? ???? ?? 1 ?????
+	options.Cookie.HttpOnly = true;
+	options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<CustomAuthenticator>();
+builder.Services.AddScoped<ResturanShemronKabab.Framwork.UI.Services.IFileManager>();
 
 var app = builder.Build();
 
@@ -51,6 +63,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

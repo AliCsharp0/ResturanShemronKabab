@@ -1,49 +1,58 @@
 ﻿using FrameWork;
+using FrameWork.DTOS;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.FlowAnalysis;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.Identity.Client;
+using Restaurant.Application;
 using Restaurant.ApplicationServiceContract.Services;
+using Restaurant.DataAccessServiceContract.Repositories;
 using Restaurant.DomainModel.ApplicationModel.Category;
 using Restaurant.DomainModel.ApplicationModel.Food;
 using ResturanShemronKabab.ViewModel;
+using System.Net.NetworkInformation;
 
 namespace ResturanShemronKabab.Controllers
 {
-    public class FoodManagementController : Controller
-    {
-        private readonly IFoodApplication foodApplication;
+	public class FoodManagementController : Controller
+	{
+		private readonly IFoodApplication foodApplication;
 
-        private readonly ICategoryApplication categoryApplication;
+		private readonly ICategoryApplication categoryApplication;
 
 		private readonly IHostEnvironment env;
 
-		public FoodManagementController(IFoodApplication foodApplication , ICategoryApplication categoryApplication, IHostEnvironment env)
-        {
-            this.foodApplication = foodApplication;
-            this.categoryApplication = categoryApplication;
-            this.env = env;
-        }
+		private readonly IFoodRepository foodRepository;
 
-        private void InflateCategoryDrp()
-        {
-            var Cat = categoryApplication.GetDrp();
+		public FoodManagementController(IFoodApplication foodApplication, ICategoryApplication categoryApplication, IHostEnvironment env, IFoodRepository foodRepository)
+		{
+			this.foodApplication = foodApplication;
+			this.categoryApplication = categoryApplication;
+			this.env = env;
+			this.foodRepository = foodRepository;
+		}
+
+		private void InflateCategoryDrp()
+		{
+			var Cat = categoryApplication.GetDrp();
 			Cat.Insert(0, new CategoryListForDrp { CategoryID = -1, CategoryName = "...Please Select..." });
 			SelectList categoryDropDown = new SelectList(Cat, "CategoryID", "CategoryName");
 			ViewBag.categoryDropDown = categoryDropDown;
 		}
 
 		public IActionResult Index(FoodSearchModel sm)
-        {
-            InflateCategoryDrp();
+		{
+			InflateCategoryDrp();
 			return View(sm);
-        }
+		}
 
-        public IActionResult List()
-        {
-            var food = foodApplication.GetAllListItem();
-            return View(food);
-        }
+		public IActionResult List()
+		{
+			var food = foodApplication.GetAllListItem();
+			return View(food);
+		}
 
 		public IActionResult ListUI()
 		{
@@ -52,22 +61,22 @@ namespace ResturanShemronKabab.Controllers
 		}
 
 		public IActionResult Add()
-        {
+		{
 			InflateCategoryDrp();
 			return View();
-        }
+		}
         [HttpPost]
         public JsonResult Add(FoodAddEditViewModel model)
         {
-			//var op = foodApplication.Register(model);
-			//return Json(op);
-			string PhisycalAddress = Path.GetFileName(model.Picture.FileName).ToUniqueFileName();
-			string Relativeaddress = @"~/Images/" + PhisycalAddress;
-			PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
+            //var op = foodApplication.Register(model);
+            //return Json(op);
+            string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
+            string Relativeaddress = @"~/Images/" + PhisycalAddress;
+            PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
             FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
-			{
-				 model.Picture.CopyTo(fs);
-			};
+            {
+                model.Picture.CopyTo(fs);
+            };
             FoodAddAndEditModel foodAddAndEditModel = new FoodAddAndEditModel
             {
                 ImageURL = Relativeaddress,
@@ -79,42 +88,174 @@ namespace ResturanShemronKabab.Controllers
             };
             var op = foodApplication.Register(foodAddAndEditModel);
             return Json(op);
+        }
+
+
+        [HttpPost]
+		public JsonResult Remove(int ID)
+		{
+			//         var food = foodApplication.Get(ID);
+			//if (!string.IsNullOrEmpty(food.ImageURL))
+			//{
+			//	var url = env.ContentRootPath + @"\wwwroot" + food.ImageURL.Substring(1, food.ImageURL.Length - 1).Replace(@"/", @"\");
+			//	if (System.IO.File.Exists(url))
+			//	{
+			//		System.IO.File.Delete(url);
+			//	}
+			//}
+			var op = foodApplication.Remove(ID);
+			return Json(op);
 		}
 
+		public IActionResult Search(FoodSearchModel sm)
+		{
+			var food = foodApplication.Search(sm, out int recordCount);
+			return PartialView("List", food);
+		}
+
+        //[HttpPost]
+        //public IActionResult DeleteImage(int foodID)
+        //{
+        //	var n = foodRepository.Get(foodID);
+        //	if (!string.IsNullOrEmpty(n.ImageURL) && n.ImageURL.ToLower() != @"~/images/noimage.png")
+        //	{
+        //		var url = env.ContentRootPath + @"\wwwroot" + n.ImageURL.Substring(1).Replace(@"/", @"\");
+        //		if (System.IO.File.Exists(url))
+        //		{
+        //			System.IO.File.Delete(url);
+        //		}
+        //	}
+        //	OperationResult op = new OperationResult("Delete Image ");
+        //	try
+        //	{
+        //		foodRepository.RemoveImage(foodID);
+        //		return Json(op.ToSuccess("Delete Image Success Fully"));
+        //	}
+        //	catch (Exception ex)
+        //	{
+        //		return Json(op.ToFail("Delete Image Failed"));
+        //	}
+        //}
         [HttpPost]
-        public JsonResult Remove(int ID)
+        public IActionResult DeleteImage(int foodID)
         {
-            var food = foodApplication.Get(ID);
-			if (!string.IsNullOrEmpty(food.ImageURL))
+            var n = foodApplication.Get(foodID);
+            if (!string.IsNullOrEmpty(n.ImageURL) && n.ImageURL.ToLower() != @"~/images/noimage.png")
+            {
+                var url = env.ContentRootPath + @"\wwwroot" + n.ImageURL.Substring(1).Replace(@"/", @"\");
+                if (System.IO.File.Exists(url))
+                {
+                    System.IO.File.Delete(url);
+                }
+            }
+              var op = foodApplication.RemoveImage(foodID);
+                return Json(op);
+        }
+
+        public IActionResult Update(int foodID)
+		{
+			var n = foodRepository.Get(foodID);
+			InflateCategoryDrp();
+			var food = new FoodDetailsModel
 			{
-				var url = env.ContentRootPath + @"\wwwroot" + food.ImageURL.Substring(1, food.ImageURL.Length - 1).Replace(@"/", @"\");
-				if (System.IO.File.Exists(url))
-				{
-					System.IO.File.Delete(url);
-				}
-			}
-			var op = foodApplication.Remove(ID);
-            return Json(op);
-        }
-
-        public IActionResult Update(int id)
-        {
-            InflateCategoryDrp();
-            var food = foodApplication.Get(id);
+				FoodID = foodID,
+				FoodName = n.FoodName,
+				CategoryID = n.CategoryID,
+				ImageURL = n.ImageURL,
+				Materials = n.Materials,
+				UnitPrice = n.UnitPrice,
+			};
 			return View(food);
-        }
+		}
 
-        [HttpPost]
-        public JsonResult Update(FoodAddAndEditModel model)
-        {
-            var op = foodApplication.Update(model);
-            return Json(op);
-        }
+		[HttpPost]
+		public IActionResult Update(FoodAddEditViewModel model)
+		{
+			var oldFood = foodRepository.Get(model.FoodID);
+			if (model.Picture == null)
+			{
+				FoodAddAndEditModel NewFood = new FoodAddAndEditModel
+				{
+					FoodID = model.FoodID,
+					ImageURL = oldFood.ImageURL,
+					FoodName = model.FoodName,
+					CategoryID = model.CategoryID,
+					Materials = model.Materials,
+					UnitPrice = model.UnitPrice,
+				};
+				var opExist = foodApplication.Update(NewFood);
+				if (!opExist.Success)
+				{
+					return View(model);
+				}
+				return RedirectToAction("Index");
+			}
 
-        public IActionResult Search(FoodSearchModel sm)
-        {
-            var food = foodApplication.Search(sm , out int recordCount);
-            return PartialView("List",food);
-        }
+			else//agar ax bood
+			{
+
+				if (!string.IsNullOrEmpty(oldFood.ImageURL) && oldFood.ImageURL.ToLower() != "~/images/noimage.png")
+				{
+					var url = env.ContentRootPath + @"\wwwroot" + oldFood.ImageURL.Substring(1, oldFood.ImageURL.Length - 1).Replace(@"/", @"\");
+					if (System.IO.File.Exists(url))
+					{
+						System.IO.File.Delete(url);
+					}
+				}
+
+				if (!news.Picture.FileName.ChekFileName())
+				{
+					TempData["ErrorMessage"] = "Invalid FileName";
+					await InflateCategories();
+					return View(news);
+				}
+				if (news.Picture.Length < 2048 || news.Picture.Length > 2097152)
+				{
+					TempData["ErrorMessage"] = "Invalid File Size";
+					await InflateCategories();
+					return View(news);
+				}
+				string PhisycalAddress = Path.GetFileName(news.Picture.FileName).ToUniqueFileName();
+				string Relativeaddress = @"~/NewsImage/" + PhisycalAddress;
+				PhisycalAddress = env.ContentRootPath + @"\wwwroot\NewsImage\" + PhisycalAddress;
+				FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+				{
+					await news.Picture.CopyToAsync(fs);
+					fs.Close();
+				};
+				DomainModel.ViewModel.Newes.NewsAddEditModel n = new NewsAddEditModel
+				{
+					ImageUrl = Relativeaddress
+					,
+					NewsCategoryID = news.NewsCategoryID
+					,
+					NewsText = news.NewsText
+					,
+					NewsTitle = news.NewsTitle
+					,
+					RegistrationDate = DateTime.Now
+					,
+					Slug = news.Slug
+					,
+					SmallDescription = news.SmallDescription
+					,
+					SortOrder = news.SortOrder
+					,
+					VisitCount = news.VisitCount
+					,
+					VoteCount = news.VoteCount
+					,
+					VoteSumation = news.VoteSumation
+
+				};
+				var op = await newsRepo.Add(n);
+				if (!op.Success)
+				{
+					TempData["ErrorMessage"] = op.Message;
+					return View(news);
+				}
+				return RedirectToAction("index");
+			}
+		}
 	}
 }

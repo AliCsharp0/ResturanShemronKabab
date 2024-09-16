@@ -288,7 +288,6 @@ button.accept-policy {
 }
 
 .ContainerLoginAdmin {
-    margin-right: 1114px;
     border-radius: 30px;
     width: 85px;
     background-color: rgb(243, 179, 26);
@@ -305,4 +304,14 @@ button.accept-policy {
 
 .ContainerLoginAdmin :hover {
     background-color: rgb(255,219,132);
+}
+
+.WelcomeMenu {
+    background-color: #0dcaf0;
+    width: 220px;
+    display: flex;
+    justify-content: center;
+    color: white !important;
+    border-radius: 25px;
+    box-shadow: 8px 11px 10px 10px rgba(6, 8, 10, 0.05);
 }

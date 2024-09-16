@@ -1,55 +1,46 @@
-﻿@model Restaurant.DomainModel.ApplicationModel.Food.FoodAddAndEditModel
+﻿@* @model ResturanShemronKabab.ViewModel.FoodAddEditViewModel *@
+@model ResturanShemronKabab.ViewModel.FoodDetailsModel
 @{
 	Layout = null;
-    SelectList categoryDropDown = (SelectList)ViewBag.categoryDropDown;
+	SelectList categoryDropDown = (SelectList)ViewBag.categoryDropDown;
 }
-<h4>Food Edit Model</h4>
-<hr />
+<h4>FoodAddAndEditModel</h4>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Update" id="frmUpdateFood">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-
-                <input type="hidden" asp-for="FoodID" class="form-control" />
-
-            </div>
-            <div class="form-group">
-
-                <input type="hidden" asp-for="FoodID" class="form-control" />
-
-            </div>
-            <div class="form-group">
-                <label for="CategoryID">Category</label>
-                <select asp-items="categoryDropDown" class="form-control" asp-for="CategoryID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="FoodName" class="control-label"></label>
-                <input asp-for="FoodName" class="form-control" type="text" placeholder="Food Name" id="Name" data-Err-Name="spnErrName" data-msg="Enter your Food Name correctly" oninput="ValidationName(this)" />
-                <span class="text-danger" id="spnErrName"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UnitPrice" class="control-label"></label>
-                <input asp-for="UnitPrice" class="form-control" type="text" placeholder="UnitPrice" id="UnitPrice" data-Err-UnitPrice="spnErrUnitPrice" data-msg="Enter your UnitPrice correctly" oninput="ValidationUnitPrice(this)" />
-                <span class="text-danger" id="spnErrUnitPrice"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Materials" class="control-label"></label>
-                <input asp-for="Materials" class="form-control" type="text" placeholder="Small Description" id="SmallDescription" data-Err-SmallDescription="spnErrSmallDescription" data-msg="Enter your Small Description correctly" oninput="ValidationSmallDescription(this)" />
-                <span class="text-danger" id="spnErrSmallDescription"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageURL" class="control-label"></label>
-                <input asp-for="ImageURL" class="form-control" />
-                <span asp-validation-for="ImageURL" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <span type="submit" class="btn btn-success saveUpdate" data-action="Update" data-controller="FoodManagement" data-form-id="frmUpdateFood">Update</span>
-            </div>
-        </form>
-    </div>
+	<div class="col-md-4">
+		<form asp-action="Update" asp-controller="FoodManagement" method="post" enctype="multipart/form-data">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label for="CategoryID">Category</label>
+				<select asp-items="categoryDropDown" class="form-control" asp-for="CategoryID"></select>
+			</div>
+			<div class="form-group">
+				<label asp-for="FoodName" class="control-label"></label>
+				<input asp-for="FoodName" class="form-control" type="text" placeholder="Food Name" id="Name" data-Err-Name="spnErrName" data-msg="Enter your Food Name correctly" oninput="ValidationName(this)" />
+				<span class="text-danger" id="spnErrName"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="UnitPrice" class="control-label"></label>
+				<input asp-for="UnitPrice" class="form-control" type="text" placeholder="UnitPrice" id="UnitPrice" data-Err-UnitPrice="spnErrUnitPrice" data-msg="Enter your UnitPrice correctly" oninput="ValidationUnitPrice(this)" />
+				<span class="text-danger" id="spnErrUnitPrice"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Materials" class="control-label"></label>
+				<input asp-for="Materials" class="form-control" type="text" placeholder="Small Description" id="SmallDescription" data-Err-SmallDescription="spnErrSmallDescription" data-msg="Enter your Small Description correctly" oninput="ValidationSmallDescription(this)" />
+				<span class="text-danger" id="spnErrSmallDescription"></span>
+			</div>
+			<div class="form-group">
+				<span> Your Old Image is : </span>
+				<img src="@Url.Content(Model.ImageURL)" width="200" />
+			</div>
+			<div class="form-group">
+				<span> Select a new Image If Image Must Change</span>
+				<input type="file" name="Picture" id="Picture" value="" />
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Update" class="btn btn-success" />
+				<a href="Index" class="btn btn-success">Cancel</a>
+			</div>
+		</form>
+	</div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>

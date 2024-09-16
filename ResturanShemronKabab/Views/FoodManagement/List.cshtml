@@ -1,53 +1,52 @@
 ﻿@{
 	Layout = null;
 }
+
 @model IEnumerable<Restaurant.DomainModel.ApplicationModel.Food.FoodListItem>
-<table class="table table-bordered table-hover table-striped ">
-	<thead>
-		<tr>
-			<th>Food ID</th>
-			<th>Food Name</th>
-			<th>Category Name</th>
-			<th>Unit Price</th>
-			<th>Materials</th>
-			<th>Has Related Order</th>
+
+<table class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <th>Food ID</th>
+            <th>Food Name</th>
+            <th>Category Name</th>
+            <th>Unit Price</th>
+            <th>Materials</th>
+            <th>Has Related Order</th>
 			<th>Image</th>
-			<th>Delete</th>
+			<th>Delete Image</th>
 			<th>Update</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr id="tr-@item.FoodID">
-				<td>
-					@Html.DisplayFor(modelItem => item.FoodID)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.FoodName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CategoryName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.UnitPrice)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Materials)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.HasRelatedOrder)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Image)
-				</td>
-				<td>
-					<span class="btn btn-danger btn-sm btn-Remove" data-controller="FoodManagement" data-action="Remove" data-id="@item.FoodID">Delete</span>
-				</td>
-				<td>
-					<span class="btn btn-success btn-sm btn-update" data-controller="FoodManagement" data-action="Update" data-id="@item.FoodID">Update</span>
-				</td>
-			</tr>
-		}
-	</tbody>
+			<th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id="tr-@item.FoodID">
+                <td>@Html.DisplayFor(modelItem => item.FoodID)</td>
+                <td>@Html.DisplayFor(modelItem => item.FoodName)</td>
+                <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+                <td>@Html.DisplayFor(modelItem => item.Materials)</td>
+                <td>@Html.DisplayFor(modelItem => item.HasRelatedOrder)</td>
+                @* <td>@Html.DisplayFor(modelItem => item.Image)</td> *@
+                <td>
+                    <img src='@Url.Content(@item.Image)' width="100" />
+                </td>
+                <td >
+					<span class="btn btn-warning btn-sm btn-RemoveImage" data-controller="FoodManagement" data-action="DeleteImage" data-id="@item.FoodID">Delete Image</span>
+                </td>
+                <td>
+                    @Html.ActionLink("Update","Update",new{FoodID=item.FoodID},new{@class="btn btn-primary btn-sm"})
+                </td>
+                <td>
+                    <span class="btn btn-danger btn-sm btn-Remove" data-controller="FoodManagement" data-action="Remove" data-id="@item.FoodID">Delete</span>
+                </td>
+                @* <td>
+                    <span class="btn btn-success btn-sm btn-update" data-controller="FoodManagement" data-action="Update" data-id="@item.FoodID">Update</span>
+                </td> *@
+            </tr>
+        }
+    </tbody>
 </table>
+

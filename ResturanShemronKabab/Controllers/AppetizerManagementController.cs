@@ -61,7 +61,7 @@ namespace ResturanShemronKabab.Controllers
         [HttpPost]
         public JsonResult Add(AppetizerAddEditViewModel model)
         {
-            string PhisycalAddress = Path.GetFileName(model.Picture.FileName).ToUniqueFileName();
+            string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
             string Relativeaddress = @"~/Images/" + PhisycalAddress;
             PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
             FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
@@ -85,15 +85,15 @@ namespace ResturanShemronKabab.Controllers
         [HttpPost]
 		public JsonResult Remove(int id)
 		{
-			var appetizer = appetizerApplication.Get(id);
-			if (!string.IsNullOrEmpty(appetizer.ImageURL))
-			{
-				var url = env.ContentRootPath + @"\wwwroot" + appetizer.ImageURL.Substring(1, appetizer.ImageURL.Length - 1).Replace(@"/", @"\");
-				if (System.IO.File.Exists(url))
-				{
-					System.IO.File.Delete(url);
-				}
-			}
+			//var appetizer = appetizerApplication.Get(id);
+			//if (!string.IsNullOrEmpty(appetizer.ImageURL))
+			//{
+			//	var url = env.ContentRootPath + @"\wwwroot" + appetizer.ImageURL.Substring(1, appetizer.ImageURL.Length - 1).Replace(@"/", @"\");
+			//	if (System.IO.File.Exists(url))
+			//	{
+			//		System.IO.File.Delete(url);
+			//	}
+			//}
 			var op = appetizerApplication.Remove(id);
 			return Json(op);
 		}

@@ -79,15 +79,15 @@ namespace ResturanShemronKabab.Controllers
         [HttpPost]
 		public JsonResult Remove(int id)
 		{
-			var beverages = beveragesApplication.Get(id);
-			if (!string.IsNullOrEmpty(beverages.ImageURL))
-			{
-				var url = env.ContentRootPath + @"\wwwroot" + beverages.ImageURL.Substring(1, beverages.ImageURL.Length - 1).Replace(@"/", @"\");
-				if (System.IO.File.Exists(url))
-				{
-					System.IO.File.Delete(url);
-				}
-			}
+			//var beverages = beveragesApplication.Get(id);
+			//if (!string.IsNullOrEmpty(beverages.ImageURL))
+			//{
+			//	var url = env.ContentRootPath + @"\wwwroot" + beverages.ImageURL.Substring(1, beverages.ImageURL.Length - 1).Replace(@"/", @"\");
+			//	if (System.IO.File.Exists(url))
+			//	{
+			//		System.IO.File.Delete(url);
+			//	}
+			//}
 			var op = beveragesApplication.Remove(id);
 			return Json(op);
 		}
@@ -111,5 +111,7 @@ namespace ResturanShemronKabab.Controllers
             var beverages = beveragesApplication.Search(sm , out int recordCount);
             return PartialView("List", beverages);
         }
+
+
     }
 }

@@ -173,30 +173,66 @@
 				}
 			});
 
-			//add image
-			$(document).ready(function () {
-				$('#frmAddFood').submit(function (event) {
-					event.preventDefault(); // جلوگیری از ارسال فرم به صورت عادی
-
-					var formData = new FormData(this);
-
-					$.ajax({
-						url: '@Url.Action("Add", "FoodManagement")',
-						type: 'POST',
-						data: formData,
-						contentType: false,
-						processData: false,
-						success: function (response) {
-							// نمایش پیام موفقیت یا انجام عملیات دیگر
-							alert('Food added successfully!');
-						},
-						error: function (xhr, status, error) {
-							// نمایش پیام خطا یا انجام عملیات دیگر
-							alert('Error: ' + error);
+			//DeleteImage
+			$(document).on("click", ".btn-RemoveImage", function () {
+				if (confirm("آیا مطمن هستید")) {
+					let action = $(this).attr("data-action");
+					let controller = $(this).attr("data-controller");
+					let id = $(this).attr("data-id");
+					let sendingUrl = `/${controller}/${action}`;
+					let sendingData = `id=${id}`;
+					//$(".waiting").css("display", "flex");
+					$.post(sendingUrl, sendingData, function (operationResult) {
+						if (operationResult.success.toString() == "true") {
+							BindGrid();
+							SuccessMessage(operationResult.message);
 						}
+						else {
+							ErrorMessage(operationResult.message);
+						}
+
 					});
-				});
+				}
 			});
+			// function DeleteImage(FoodID) {
+			// 	debugger;
+			// 	$.post("/FoodManagement/DeleteImage", { foodID: FoodID }, function (op) {
+			// 		let action = "List";
+			// 		let controller = "FoodManagement";
+			// 		let sendingUrl = `/${controller}/${action}`;
+			// 		$.get(sendingUrl, null, function (recevingData) {
+			// 			$("dvContent").html(recevingData);
+			// 			BindGrid();
+			// 		});
+			// 	});
+			// }
+
+
+
+			// //add image
+			// $(document).ready(function () {
+			// 	$('#frmAddFood').submit(function (event) {
+			// 		event.preventDefault(); // جلوگیری از ارسال فرم به صورت عادی
+
+			// 		var formData = new FormData(this);
+
+			// 		$.ajax({
+			// 			url: '@Url.Action("Add", "FoodManagement")',
+			// 			type: 'POST',
+			// 			data: formData,
+			// 			contentType: false,
+			// 			processData: false,
+			// 			success: function (response) {
+			// 				// نمایش پیام موفقیت یا انجام عملیات دیگر
+			// 				alert('Food added successfully!');
+			// 			},
+			// 			error: function (xhr, status, error) {
+			// 				// نمایش پیام خطا یا انجام عملیات دیگر
+			// 				alert('Error: ' + error);
+			// 			}
+			// 		});
+			// 	});
+			// });
 
 
 
@@ -212,62 +248,27 @@
 				});
 			});
 
-			//save add image 
+			//saveAdd
 			$(document).on("click", ".saveAdd", function () {
 				debugger;
 				let action = $(this).attr("data-action");
 				let controller = $(this).attr("data-controller");
 				let formid = "#" + $(this).attr("data-form-id");
 				let sendingUrl = `/${controller}/${action}`;
+				let sendingData = $(formid).serialize();
+				$.post(sendingUrl, sendingData, function (op) {
+					if (op.success.toString() == "true") {
 
-				// Create a FormData object
-				let formData = new FormData($(formid)[0]);
+						$("#mainModal").modal("hide");
+						BindGrid();
+						SuccessMessage(op.message);
 
-				// Log FormData contents for debugging
-				for (let pair of formData.entries()) {
-					console.log(pair[0] + ', ' + pair[1]);
-				}
-
-				$.ajax({
-					url: sendingUrl,
-					type: 'POST',
-					data: formData,
-					contentType: false, // Prevent jQuery from setting the Content-Type header
-					processData: false, // Prevent jQuery from processing the data
-					success: function (op) {
-						if (op.success.toString() == "true") {
-							$("#mainModal").modal("hide");
-							BindGrid();
-							SuccessMessage(op.message);
-						} else {
-							ErrorMessage(op.message);
-						}
+					}
+					else {
+						ErrorMessage(op.message);
 					}
 				});
 			});
-
-
-			// //saveAdd
-			// $(document).on("click", ".saveAdd", function () {
-			// 	debugger;
-			// 	let action = $(this).attr("data-action");
-			// 	let controller = $(this).attr("data-controller");
-			// 	let formid = "#" + $(this).attr("data-form-id");
-			// 	let sendingUrl = `/${controller}/${action}`;
-			// 	let sendingData = $(formid).serialize();
-			// 	$.post(sendingUrl, sendingData, function (op) {
-			// 		if (op.success.toString() == "true") {
-
-			// 			$("#mainModal").modal("hide");
-			// 			BindGrid();
-			// 			SuccessMessage(op.message);
-
-			// 		}
-			// 		else {
-			// 			 ErrorMessage(op.message);
-			// 		}
-			// 	});
-			// });
 
 
 
@@ -307,43 +308,27 @@
 				});
 			});
 
-
-			//Accordion
-			var acc = document.getElementsByClassName("accordion");
-			var i;
-
-			for (i = 0; i < acc.length; i++) {
-				acc[i].addEventListener("click", function () {
-					this.classList.toggle("active");
-					var panel = this.nextElementSibling;
-					if (panel.style.display === "block") {
-						panel.style.display = "none";
-					} else {
-						panel.style.display = "block";
-					}
-				});
-			}
 		</script>
 
 	</body>
 </html>
 
-	<div class="modal" tabindex="-1" id="mainModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Modal title</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body" id="dvModalContent">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
+<div class="modal" tabindex="-1" id="mainModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Modal title</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="dvModalContent">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
 	</div>
+</div>
 
 </body>
 </html>

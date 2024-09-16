@@ -1,4 +1,5 @@
 ﻿using FrameWork.BaseRepository;
+using FrameWork.DTOS;
 using Restaurant.DomainModel.ApplicationModel.Food;
 using Restaurant.DomainModel.Models;
 using System;
@@ -22,5 +23,9 @@ namespace Restaurant.DataAccessServiceContract.Repositories
 		bool ExistNameInUpdate(int ID, string foodName);
 
         bool ExistImageInUpdate(int ID, string Image);
-	}
+
+        //void RemoveImage (int foodID);  
+
+        OperationResult RemoveImage (int foodID);
+    }
 }

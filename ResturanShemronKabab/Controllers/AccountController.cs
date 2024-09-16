@@ -1,5 +1,6 @@
 ﻿using Framework;
 using Framework.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Security.ApplicationServiceContract.Services;
 using Security.Domain;
@@ -88,5 +89,11 @@ namespace EshopMashtiHasan.Controllers
         {
             return View();
         }
-    }
+		public async Task<IActionResult> Logout()
+		{
+			await HttpContext.SignOutAsync();
+			return RedirectToAction("Index", "Home");
+		}
+
+	}
 }

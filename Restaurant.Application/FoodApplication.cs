@@ -102,6 +102,7 @@ namespace Restaurant.Application
 			{
 				return new OperationResult("Register Appetizer").ToFail("Duplicate Category Name");
 			}
+
 			Food f = ToModel(food);
             return FoodRepo.Update(f);
         }
@@ -115,5 +116,10 @@ namespace Restaurant.Application
 		{
             return FoodRepo.GetAllListItemInUI();
         }
-	}
+
+        public OperationResult RemoveImage(int foodID)
+        {
+            return FoodRepo.RemoveImage(foodID);
+        }
+    }
 }
