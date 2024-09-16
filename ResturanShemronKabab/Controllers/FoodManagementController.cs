@@ -11,6 +11,7 @@ using Restaurant.ApplicationServiceContract.Services;
 using Restaurant.DataAccessServiceContract.Repositories;
 using Restaurant.DomainModel.ApplicationModel.Category;
 using Restaurant.DomainModel.ApplicationModel.Food;
+using Restaurant.DomainModel.Models;
 using ResturanShemronKabab.ViewModel;
 using System.Net.NetworkInformation;
 
@@ -140,7 +141,7 @@ namespace ResturanShemronKabab.Controllers
 
 		public IActionResult Update(int foodID)
 		{
-			var n = foodRepository.Get(foodID);
+			var n = foodApplication.Get(foodID);
 			InflateCategoryDrp();
 			var food = new FoodDetailsModel
 			{
@@ -157,7 +158,7 @@ namespace ResturanShemronKabab.Controllers
 		[HttpPost]
 		public IActionResult Update(FoodAddEditViewModel model)
 		{
-			var oldFood = foodRepository.Get(model.FoodID);
+			var oldFood = foodApplication.Get(model.FoodID);
 			if (model.Picture == null)
 			{
 				FoodAddAndEditModel NewFood = new FoodAddAndEditModel
@@ -198,13 +199,14 @@ namespace ResturanShemronKabab.Controllers
 				};
 				FoodAddAndEditModel n = new FoodAddAndEditModel
 				{
+					FoodID = model.FoodID,
 					ImageURL = Relativeaddress,
 					FoodName = model.FoodName,
 					CategoryID = model.CategoryID,
 					Materials = model.Materials,
 					UnitPrice = model.UnitPrice,
 				};
-				var op = foodApplication.Register(n);
+				var op = foodApplication.Update(n);
 				if (!op.Success)
 				{
 					TempData["ErrorMessage"] = op.Message;

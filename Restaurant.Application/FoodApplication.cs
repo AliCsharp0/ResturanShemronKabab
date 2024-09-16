@@ -104,7 +104,8 @@ namespace Restaurant.Application
 			}
 
 			Food f = ToModel(food);
-            return FoodRepo.Update(f);
+            var operationFood =  FoodRepo.Update(f);
+            return operationFood;
         }
 
         public List<FoodListItem> GetAllListItem()
@@ -121,5 +122,6 @@ namespace Restaurant.Application
         {
              FoodRepo.RemoveImage(foodID);
         }
+
     }
 }

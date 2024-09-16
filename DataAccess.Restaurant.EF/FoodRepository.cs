@@ -170,17 +170,33 @@ namespace DataAccess.Restaurant.EF
 		public OperationResult Update(Food Current)
 		{
 			OperationResult op = new OperationResult("Update Food");
+			var food = db.Foods.FirstOrDefault(x=>x.FoodID == Current.FoodID);
 			try
 			{
-				db.Foods.Attach(Current);
-				db.Entry<Food>(Current).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+				food.FoodName = Current.FoodName;
+				food.UnitPrice = Current.UnitPrice;
+				food.Materials = Current.Materials;
+				food.CategoryID = Current.CategoryID;
+				food.ImageURL = Current.ImageURL;
+				food.FoodID = Current.FoodID;
 				db.SaveChanges();
 				return op.ToSuccess("Update Food Success Fully");
 			}
-			catch (Exception ex)
+			catch
 			{
 				return op.ToFail("Update Food Failed");
 			}
+			//try
+			//{
+			//	db.Foods.Attach(Current);
+			//	db.Entry<Food>(Current).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+			//	db.SaveChanges();
+			//	return op.ToSuccess("Update Food Success Fully");
+			//}
+			//catch (Exception ex)
+			//{
+			//	return op.ToFail("Update Food Failed");
+			//}
 		}
 
 		public void RemoveImage(int foodID)
