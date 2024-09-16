@@ -188,25 +188,12 @@ namespace ResturanShemronKabab.Controllers
 						System.IO.File.Delete(url);
 					}
 				}
-
-				//if (!model.Picture.FileName.ChekFileName())
-				//{
-				//	TempData["ErrorMessage"] = "Invalid FileName";
-				//	await InflateCategories();
-				//	return View(news);
-				//}
-				//if (news.Picture.Length < 2048 || news.Picture.Length > 2097152)
-				//{
-				//	TempData["ErrorMessage"] = "Invalid File Size";
-				//	await InflateCategories();
-				//	return View(news);
-				//}
-				string PhisycalAddress = Path.GetFileName(model.Picture.FileName).ToUniqueFileName();
-				string Relativeaddress = @"~/NewsImage/" + PhisycalAddress;
-				PhisycalAddress = env.ContentRootPath + @"\wwwroot\NewsImage\" + PhisycalAddress;
+				string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
+				string Relativeaddress = @"~/Images/" + PhisycalAddress;
+				PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
 				FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
 				{
-					 model.Picture.CopyToAsync(fs);
+					model.Picture.CopyToAsync(fs);
 					fs.Close();
 				};
 				FoodAddAndEditModel n = new FoodAddAndEditModel
@@ -217,7 +204,7 @@ namespace ResturanShemronKabab.Controllers
 					Materials = model.Materials,
 					UnitPrice = model.UnitPrice,
 				};
-				var op =  foodApplication.Register(n);
+				var op = foodApplication.Register(n);
 				if (!op.Success)
 				{
 					TempData["ErrorMessage"] = op.Message;
