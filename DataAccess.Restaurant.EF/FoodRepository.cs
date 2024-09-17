@@ -188,17 +188,6 @@ namespace DataAccess.Restaurant.EF
 			{
 				return op.ToFail("Update Food Failed");
 			}
-			//try
-			//{
-			//	db.Foods.Attach(Current);
-			//	db.Entry<Food>(Current).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-			//	db.SaveChanges();
-			//	return op.ToSuccess("Update Food Success Fully");
-			//}
-			//catch (Exception ex)
-			//{
-			//	return op.ToFail("Update Food Failed");
-			//}
 		}
 
 		public void RemoveImage(int foodID)

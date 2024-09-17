@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.FlowAnalysis;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Restaurant.Application;
 using Restaurant.ApplicationServiceContract.Services;
@@ -98,24 +99,113 @@ namespace ResturanShemronKabab.Controllers
 			return Json(op);
 		}
 
-		public IActionResult Update(int id)
-		{
-			InflateCategoryDrp();
-			var appetizer = appetizerApplication.Get(id);
-			return View( appetizer);
-		}
-		[HttpPost]
-		public JsonResult Update(AppetizerAddAndEditModel model)
-		{
-			var op = appetizerApplication.Update(model);
-			return Json(op);
-		}
-
 		public IActionResult Search(AppetizerSearchModel searchModel)
 		{
 			var appetizer = appetizerApplication.Search(searchModel, out int recordCount);
 			return PartialView("List", appetizer);
 		}
 
+		public IActionResult Update(int appetizerID)
+		{
+			var oldAppetizer = appetizerApplication.Get(appetizerID);
+			InflateCategoryDrp();
+			var appetizer = new AppetizerDetailsModel
+			{
+				AppetizerID = appetizerID,
+				AppetizerName = oldAppetizer.AppetizerName,
+				CategoryID = oldAppetizer.CategoryID,
+				ImageURl = oldAppetizer.ImageURL,
+				UnitPrice = oldAppetizer.UnitPrice,
+				SmallDescription = oldAppetizer.SmallDescription,
+			};
+			return View(appetizer);
+		}
+
+		[HttpPost]
+		public IActionResult Update(AppetizerAddEditViewModel model)
+		{
+			var oldAppetizer = appetizerApplication.Get(model.AppetizerID);
+			if (model.Picture == null)
+			{
+				AppetizerAddAndEditModel NewAppetizer = new AppetizerAddAndEditModel
+				{
+					ImageURL = oldAppetizer.ImageURL,
+					AppetizerID = model.AppetizerID,
+					AppetizerName = model.AppetizerName,
+					UnitPrice = model.UnitPrice,
+					SmallDescription = model.SmallDescription,
+					CategoryID =model.CategoryID,
+				};
+				var opExist = appetizerApplication.Update(NewAppetizer);
+				var appetizer = new AppetizerDetailsModel
+				{
+					AppetizerID = oldAppetizer.AppetizerID,
+					AppetizerName = oldAppetizer.AppetizerName,
+					UnitPrice = oldAppetizer.UnitPrice,
+					SmallDescription = oldAppetizer.SmallDescription,
+					CategoryID = oldAppetizer.CategoryID,
+					ImageURl = oldAppetizer.ImageURL,
+				};
+				if (!opExist.Success)
+				{
+					InflateCategoryDrp();
+					TempData["ErrorMessage"] = opExist.Message;
+					return View(appetizer);
+				}
+				return RedirectToAction("Index");
+			}
+
+			else//agar ax bood
+			{
+
+				if (!string.IsNullOrEmpty(oldAppetizer.ImageURL) && oldAppetizer.ImageURL.ToLower() != "~/images/noimage.png")
+				{
+					var url = env.ContentRootPath + @"\wwwroot" + oldAppetizer.ImageURL.Substring(1, oldAppetizer.ImageURL.Length - 1).Replace(@"/", @"\");
+					if (System.IO.File.Exists(url))
+					{
+						System.IO.File.Delete(url);
+					}
+				}
+				string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
+				string Relativeaddress = @"~/Images/" + PhisycalAddress;
+				PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
+				FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+				{
+					model.Picture.CopyToAsync(fs);
+					fs.Close();
+				};
+				AppetizerAddAndEditModel n = new AppetizerAddAndEditModel
+				{
+					AppetizerName = model.AppetizerName,
+					ImageURL = Relativeaddress,
+					AppetizerID = model.AppetizerID,
+					SmallDescription = model.SmallDescription,
+					CategoryID = model.CategoryID,
+					UnitPrice = model.UnitPrice,
+				};
+				var op = appetizerApplication.Update(n);
+				var appetizer = new AppetizerDetailsModel
+				{
+					AppetizerID = oldAppetizer.AppetizerID,
+					CategoryID = oldAppetizer.CategoryID,
+					ImageURl = oldAppetizer.ImageURL,
+					SmallDescription = oldAppetizer.SmallDescription,
+					UnitPrice = oldAppetizer.UnitPrice,
+					AppetizerName = oldAppetizer.AppetizerName,
+				};
+				if (op.Success)
+				{
+					return RedirectToAction("index");
+
+				}
+				else
+				{
+					InflateCategoryDrp();
+					TempData["ErrorMessage"] = op.Message;
+					return View(appetizer);
+				}
+
+			}
+		}
 	}
 }

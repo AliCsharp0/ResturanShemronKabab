@@ -112,6 +112,16 @@ namespace DataAccess.Restaurant.EF
 			}
 		}
 
+		public void RemoveImage(int appetizerID)
+		{
+			var appetizer = db.Appetizers.FirstOrDefault(x => x.AppetizerID == appetizerID);
+			if (appetizer != null && appetizer.ImageURL != string.Empty && appetizer.ImageURL.ToLower() != "~/images/noimage.png")
+			{
+				appetizer.ImageURL = "~/images/noimage.png";
+				db.SaveChanges();
+			}
+		}
+
 		public List<AppetizerListItem> Search(AppetizerSearchModel searchModel, out int RecordCount)
 		{
 			if (searchModel.PageSize == 0)
@@ -151,15 +161,20 @@ namespace DataAccess.Restaurant.EF
 
 		public OperationResult Update(Appetizer Current)
 		{
-			OperationResult op = new OperationResult("Update Appetizer");
+			OperationResult op = new OperationResult("Update Appetizer ");
+			var appetizer = db.Appetizers.FirstOrDefault(x => x.AppetizerID == Current.AppetizerID);
 			try
 			{
-				db.Appetizers.Attach(Current);
-				db.Entry<Appetizer>(Current).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+				appetizer.AppetizerID = Current.AppetizerID;
+				appetizer.AppetizerName = Current.AppetizerName;
+				appetizer.UnitPrice = Current.UnitPrice;
+				appetizer.CategoryID = Current.CategoryID;
+				appetizer.SmallDescription = Current.SmallDescription;
+				appetizer.ImageURL = Current.ImageURL;
 				db.SaveChanges();
 				return op.ToSuccess("Update Appetizer Success Fully");
 			}
-			catch (Exception ex)
+			catch
 			{
 				return op.ToFail("Update Appetizer Failed");
 			}

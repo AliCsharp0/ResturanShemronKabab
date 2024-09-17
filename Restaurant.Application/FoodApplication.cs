@@ -106,10 +106,6 @@ namespace Restaurant.Application
 			{
 				return new OperationResult("Update Food").ToFail("Duplicate Category Name");
 			}
-			if (food.ImageURL.Length < 2048 || food.ImageURL.Length > 2097152)
-			{
-                return new OperationResult("Update Food").ToFail("The size of the photo is large");
-			}
 
 			Food f = ToModel(food);
             var operationFood =  FoodRepo.Update(f);

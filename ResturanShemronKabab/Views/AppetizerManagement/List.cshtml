@@ -37,7 +37,7 @@
 					<span class="btn btn-danger btn-sm btn-Remove" data-controller="AppetizerManagement" data-action="Remove" data-id="@item.AppetizerID">Delete</span>
 				</td>
 				<td>
-					<span class="btn btn-success btn-sm btn-update" data-controller="AppetizerManagement" data-action="Update" data-id="@item.AppetizerID">Update</span>
+					@Html.ActionLink("Update", "Update", new { AppetizerID = item.AppetizerID }, new { @class = "btn btn-primary btn-sm" })
 				</td>
 			</tr>
 		}
