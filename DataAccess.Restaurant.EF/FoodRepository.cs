@@ -43,6 +43,8 @@ namespace DataAccess.Restaurant.EF
 			return db.Foods.Any(x => x.ImageURL == Image);
 		}
 
+
+
 		public Food Get(int ID)
 		{
 			return db.Foods.FirstOrDefault(x => x.FoodID == ID);

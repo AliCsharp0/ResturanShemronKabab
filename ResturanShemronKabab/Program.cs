@@ -1,5 +1,9 @@
 ﻿using ResturanShemronKabab.Helper;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Restaurant.Application;
+using Restaurant.ApplicationServiceContract.Services;
+using ResturanShemronKabab.Framwork.UI.Services;
+using ResturanShemronKabab.Frawwork.UI;
 
 var builder = WebApplication.CreateBuilder(args);
 

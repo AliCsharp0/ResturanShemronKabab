@@ -12,6 +12,7 @@ using Restaurant.DataAccessServiceContract.Repositories;
 using Restaurant.DomainModel.ApplicationModel.Category;
 using Restaurant.DomainModel.ApplicationModel.Food;
 using Restaurant.DomainModel.Models;
+using ResturanShemronKabab.Framwork.UI.Services;
 using ResturanShemronKabab.ViewModel;
 using System.Net.NetworkInformation;
 
@@ -25,14 +26,11 @@ namespace ResturanShemronKabab.Controllers
 
 		private readonly IHostEnvironment env;
 
-		private readonly IFoodRepository foodRepository;
-
-		public FoodManagementController(IFoodApplication foodApplication, ICategoryApplication categoryApplication, IHostEnvironment env, IFoodRepository foodRepository)
+		public FoodManagementController(IFoodApplication foodApplication, ICategoryApplication categoryApplication, IHostEnvironment env)
 		{
 			this.foodApplication = foodApplication;
 			this.categoryApplication = categoryApplication;
 			this.env = env;
-			this.foodRepository = foodRepository;
 		}
 
 		private void InflateCategoryDrp()
@@ -66,33 +64,33 @@ namespace ResturanShemronKabab.Controllers
 			InflateCategoryDrp();
 			return View();
 		}
-        [HttpPost]
-        public JsonResult Add(FoodAddEditViewModel model)
-        {
-            //var op = foodApplication.Register(model);
-            //return Json(op);
-            string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
-            string Relativeaddress = @"~/Images/" + PhisycalAddress;
-            PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
-            FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
-            {
-                model.Picture.CopyTo(fs);
-            };
-            FoodAddAndEditModel foodAddAndEditModel = new FoodAddAndEditModel
-            {
-                ImageURL = Relativeaddress,
-                FoodName = model.FoodName,
-                CategoryID = model.CategoryID,
-                Materials = model.Materials,
-                UnitPrice = model.UnitPrice,
-                FoodID = model.FoodID,
-            };
-            var op = foodApplication.Register(foodAddAndEditModel);
-            return Json(op);
-        }
+		[HttpPost]
+		public JsonResult Add(FoodAddEditViewModel model)
+		{
+			//var op = foodApplication.Register(model);
+			//return Json(op);
+			string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
+			string Relativeaddress = @"~/Images/" + PhisycalAddress;
+			PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
+			FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+			{
+				model.Picture.CopyTo(fs);
+			};
+			FoodAddAndEditModel foodAddAndEditModel = new FoodAddAndEditModel
+			{
+				ImageURL = Relativeaddress,
+				FoodName = model.FoodName,
+				CategoryID = model.CategoryID,
+				Materials = model.Materials,
+				UnitPrice = model.UnitPrice,
+				FoodID = model.FoodID,
+			};
+			var op = foodApplication.Register(foodAddAndEditModel);
+			return Json(op);
+		}
 
 
-        [HttpPost]
+		[HttpPost]
 		public JsonResult Remove(int ID)
 		{
 			//         var food = foodApplication.Get(ID);
@@ -171,9 +169,20 @@ namespace ResturanShemronKabab.Controllers
 					UnitPrice = model.UnitPrice,
 				};
 				var opExist = foodApplication.Update(NewFood);
+				var food = new FoodDetailsModel
+				{
+					FoodID = oldFood.FoodID,
+					FoodName = oldFood.FoodName,
+					CategoryID = oldFood.CategoryID,
+					ImageURL = oldFood.ImageURL,
+					Materials = oldFood.Materials,
+					UnitPrice = oldFood.UnitPrice,
+				};
 				if (!opExist.Success)
 				{
-					return View(model);
+					InflateCategoryDrp();
+					TempData["ErrorMessage"] = opExist.Message;
+					return View(food);
 				}
 				return RedirectToAction("Index");
 			}
@@ -207,12 +216,27 @@ namespace ResturanShemronKabab.Controllers
 					UnitPrice = model.UnitPrice,
 				};
 				var op = foodApplication.Update(n);
-				if (!op.Success)
+				var food = new FoodDetailsModel
 				{
-					TempData["ErrorMessage"] = op.Message;
-					return View(model);
+					FoodID = oldFood.FoodID,
+					FoodName = oldFood.FoodName,
+					CategoryID = oldFood.CategoryID,
+					ImageURL = oldFood.ImageURL,
+					Materials = oldFood.Materials,
+					UnitPrice = oldFood.UnitPrice,
+				};
+				if (op.Success)
+				{
+					return RedirectToAction("index");
+
 				}
-				return RedirectToAction("index");
+				else
+				{
+					InflateCategoryDrp();
+					TempData["ErrorMessage"] = op.Message;
+					return View(food);
+				}
+
 			}
 		}
 	}

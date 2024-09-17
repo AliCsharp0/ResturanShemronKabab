@@ -11,13 +11,22 @@
 <head>
 	<meta name="viewport" content="width=device-width" />
 	<title>Add</title>
+	<link href="~/content/font-awesome.css" rel="stylesheet" />
+	<link href="~/content/font-awesome.min.css" rel="stylesheet" />
+	<link href="~/css/stylesheet.css" rel="stylesheet" />
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/ResturanShemronKabab.styles.css" asp-append-version="true" />
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<link href="~/css/sweetalert2.min.css" rel="stylesheet" />
+	<script src="~/validation/validation.js"></script>
 </head>
 <body>
 	@if (TempData["ErrorMessage"] != null)
 	{
-		<h1 class="text-danger h1">
-			@TempData["ErrorMessage"]
-		</h1>
+		<h1 style="color:red">@TempData["ErrorMessage"]</h1>
 	}
 
 <div class="row">
@@ -58,7 +67,7 @@
 			</div>
 			<div class="form-group">
 					<input type="submit" value="Update" class="btn btn-success .btn-updateFood" />
-				<a href="Index" class="btn btn-success">Cancel</a>
+				<a href="Index" class="btn btn-primary">Cancel</a>
 			</div>
 		</form>
 	</div>

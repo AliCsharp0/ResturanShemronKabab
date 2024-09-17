@@ -69,6 +69,10 @@ namespace Restaurant.Application
 			{
 				return new OperationResult("Register Appetizer").ToFail("Duplicate Category Name");
 			}
+			if (food.ImageURL.Length < 2048 || food.ImageURL.Length > 2097152)
+			{
+				return new OperationResult("Register Food").ToFail("The size of the photo is large");
+			}
 			Food f = ToModel(food);
             var OperationFood = FoodRepo.Register(f);
             return OperationFood;
@@ -100,7 +104,11 @@ namespace Restaurant.Application
 			}
 			if (food.CategoryID < 0)
 			{
-				return new OperationResult("Register Appetizer").ToFail("Duplicate Category Name");
+				return new OperationResult("Update Food").ToFail("Duplicate Category Name");
+			}
+			if (food.ImageURL.Length < 2048 || food.ImageURL.Length > 2097152)
+			{
+                return new OperationResult("Update Food").ToFail("The size of the photo is large");
 			}
 
 			Food f = ToModel(food);
