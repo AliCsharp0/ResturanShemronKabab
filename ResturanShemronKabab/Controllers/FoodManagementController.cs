@@ -89,7 +89,6 @@ namespace ResturanShemronKabab.Controllers
 			return Json(op);
 		}
 
-
 		[HttpPost]
 		public JsonResult Remove(int ID)
 		{
@@ -135,7 +134,6 @@ namespace ResturanShemronKabab.Controllers
 				return Json(op.ToFail("Image did not Removed"));
 			}
 		}
-
 
 		public IActionResult Update(int foodID)
 		{
