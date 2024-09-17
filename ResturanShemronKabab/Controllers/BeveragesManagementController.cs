@@ -1,11 +1,14 @@
 ﻿using FrameWork;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Restaurant.Application;
 using Restaurant.ApplicationServiceContract.Services;
 using Restaurant.DomainModel.ApplicationModel.Appetizer;
 using Restaurant.DomainModel.ApplicationModel.Beverages;
 using Restaurant.DomainModel.ApplicationModel.Category;
+using Restaurant.DomainModel.ApplicationModel.Food;
+using Restaurant.DomainModel.Models;
 using ResturanShemronKabab.ViewModel;
 
 namespace ResturanShemronKabab.Controllers
@@ -92,21 +95,105 @@ namespace ResturanShemronKabab.Controllers
 			return Json(op);
 		}
 
-		public IActionResult Update(int id)
-        {
-            InflateCategoryDrp();
-            var beverages = beveragesApplication.Get(id);
-            return View(beverages);
-        }
+		public IActionResult Update(int beveragesID)
+		{
+			var n = beveragesApplication.Get(beveragesID);
+			InflateCategoryDrp();
+			var beverages = new BeveragesDetailsModel
+			{
+				BeveragesID = beveragesID,
+				BeveragesName = n.BeveragesName,
+				UnitPrice = n.UnitPrice,
+				ImageURL = n.ImageURL,
+				CategoryID = n.CategoryID,
+			};
+			return View(beverages);
+		}
 
-        [HttpPost]
-        public JsonResult Update(BeveragesAddAndEditModel model)
-        {
-            var op = beveragesApplication.Update(model);
-            return Json(op);
-        }
+		[HttpPost]
+		public IActionResult Update(BeveragesAddEditViewModel model)
+		{
+			var oldBeverages = beveragesApplication.Get(model.BeveragesID);
+			if (model.Picture == null)
+			{
+				BeveragesAddAndEditModel NewBeverages = new BeveragesAddAndEditModel
+				{
+					ImageURL = oldBeverages.ImageURL,
+					BeveragesID = model.BeveragesID,
+					CategoryID = model.CategoryID,
+					UnitPrice = model.UnitPrice,
+					BeveragesName = model.BeveragesName,
+				};
+				var opExist = beveragesApplication.Update(NewBeverages);
+				var beverages = new BeveragesDetailsModel
+				{
+					BeveragesID = oldBeverages.BeveragesID,
+					ImageURL = oldBeverages.ImageURL,
+					BeveragesName = oldBeverages.BeveragesName,
+					UnitPrice = oldBeverages.UnitPrice,
+					CategoryID = oldBeverages.CategoryID,
+				};
+				if (!opExist.Success)
+				{
+					InflateCategoryDrp();
+					TempData["ErrorMessage"] = opExist.Message;
+					return View(beverages);
+				}
+				return RedirectToAction("Index");
+			}
 
-        public IActionResult Search(BeveragesSearchModel sm)
+			else//agar ax bood
+			{
+
+				if (!string.IsNullOrEmpty(oldBeverages.ImageURL) && oldBeverages.ImageURL.ToLower() != "~/images/noimage.png")
+				{
+					var url = env.ContentRootPath + @"\wwwroot" + oldBeverages.ImageURL.Substring(1, oldBeverages.ImageURL.Length - 1).Replace(@"/", @"\");
+					if (System.IO.File.Exists(url))
+					{
+						System.IO.File.Delete(url);
+					}
+				}
+				string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
+				string Relativeaddress = @"~/Images/" + PhisycalAddress;
+				PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
+				FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+				{
+					model.Picture.CopyToAsync(fs);
+					fs.Close();
+				};
+				BeveragesAddAndEditModel n = new BeveragesAddAndEditModel
+				{
+					BeveragesID = model.BeveragesID,
+					ImageURL = Relativeaddress,
+					BeveragesName = model.BeveragesName,
+					CategoryID = model.CategoryID,
+					UnitPrice = model.UnitPrice,
+				};
+				var op = beveragesApplication.Update(n);
+				var food = new BeveragesDetailsModel
+				{
+					BeveragesID = oldBeverages.BeveragesID,
+					BeveragesName = oldBeverages.BeveragesName,
+					CategoryID = oldBeverages.CategoryID,
+					ImageURL = oldBeverages.ImageURL,
+					UnitPrice = oldBeverages.UnitPrice,
+				};
+				if (op.Success)
+				{
+					return RedirectToAction("index");
+
+				}
+				else
+				{
+					InflateCategoryDrp();
+					TempData["ErrorMessage"] = op.Message;
+					return View(food);
+				}
+
+			}
+		}
+
+		public IActionResult Search(BeveragesSearchModel sm)
         {
             var beverages = beveragesApplication.Search(sm , out int recordCount);
             return PartialView("List", beverages);

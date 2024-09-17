@@ -142,10 +142,14 @@ namespace DataAccess.Restaurant.EF
         public OperationResult Update(Beverages Current)
         {
             OperationResult op = new OperationResult("Update Beverages");
+            var beve = db.Beverages.FirstOrDefault(x => x.BeveragesID == Current.BeveragesID);
             try
             {
-                db.Beverages.Attach(Current);
-                db.Entry<Beverages>(Current).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                beve.BeveragesID = Current.BeveragesID;
+                beve.BeveragesName = Current.BeveragesName;
+                beve.CategoryID = Current.CategoryID;
+                beve.UnitPrice = Current.UnitPrice;
+                beve.ImageURL = Current.ImageURL;
                 db.SaveChanges();
                 return op.ToSuccess("Update Beverages Success Fully ");
             }

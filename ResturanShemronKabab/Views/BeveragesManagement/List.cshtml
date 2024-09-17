@@ -40,7 +40,7 @@
 					<span class="btn btn-danger btn-sm btn-Remove" data-controller="BeveragesManagement" data-action="Remove" data-id="@item.BeveragesID">Delete</span>
 				</td>
 				<td>
-					<span class="btn btn-success btn-sm btn-update" data-controller="BeveragesManagement" data-action="Update" data-id="@item.BeveragesID">Update</span>
+					@Html.ActionLink("Update", "Update", new { BeveragesID = item.BeveragesID }, new { @class = "btn btn-primary btn-sm" })
 				</td>
 				
 			</tr>
