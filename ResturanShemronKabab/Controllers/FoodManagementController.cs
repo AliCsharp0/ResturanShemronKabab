@@ -65,17 +65,21 @@ namespace ResturanShemronKabab.Controllers
 			return View();
 		}
 		[HttpPost]
-		public JsonResult Add(FoodAddEditViewModel model)
+		public IActionResult Add(FoodAddEditViewModel model)
 		{
-			//var op = foodApplication.Register(model);
-			//return Json(op);
+			if(model.Picture == null)
+			{
+				InflateCategoryDrp();
+				TempData["ErrorMessage"] = "Please select the food";
+                return View(model);
+            }
 			string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
 			string Relativeaddress = @"~/Images/" + PhisycalAddress;
 			PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
-			FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+			using (FileStream fs = new FileStream(PhisycalAddress, FileMode.Create))
 			{
 				model.Picture.CopyTo(fs);
-			};
+			}
 			FoodAddAndEditModel foodAddAndEditModel = new FoodAddAndEditModel
 			{
 				ImageURL = Relativeaddress,
@@ -86,7 +90,13 @@ namespace ResturanShemronKabab.Controllers
 				FoodID = model.FoodID,
 			};
 			var op = foodApplication.Register(foodAddAndEditModel);
-			return Json(op);
+			if (!op.Success)
+			{
+                InflateCategoryDrp();
+				TempData["ErrorMessage"] = op.Message;
+				return View(model);
+			}
+			return RedirectToAction("index");
 		}
 
 		[HttpPost]
@@ -199,11 +209,10 @@ namespace ResturanShemronKabab.Controllers
 				string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
 				string Relativeaddress = @"~/Images/" + PhisycalAddress;
 				PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
-				FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+				using (FileStream fs = new FileStream(PhisycalAddress, FileMode.Create))
 				{
-					model.Picture.CopyToAsync(fs);
-					fs.Close();
-				};
+					 model.Picture.CopyTo(fs);
+				}
 				FoodAddAndEditModel n = new FoodAddAndEditModel
 				{
 					FoodID = model.FoodID,

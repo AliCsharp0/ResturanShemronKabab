@@ -25,6 +25,6 @@ namespace Restaurant.ApplicationServiceContract.Services
 
 		List<BeveragesListItemUI> GetAllListItemInUI();
 
-
+        void RemoveImage(int ID);
 	}
 }

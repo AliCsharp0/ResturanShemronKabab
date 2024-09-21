@@ -1,4 +1,4 @@
-﻿@* @model Restaurant.DomainModel.ApplicationModel.Appetizer.AppetizerAddAndEditModel *@
+﻿ 
 @model ResturanShemronKabab.ViewModel.AppetizerAddEditViewModel
 @{
 	Layout = null;
@@ -6,6 +6,7 @@
 }
 <h4>Add New Appetizer</h4>
 <hr />
+@*
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Add" asp-controller="AppetizerManagement" method="post" enctype="multipart/form-data">
@@ -39,3 +40,68 @@
         </form>
     </div>
 </div>
+ *@
+
+<h4 style="display: flex; justify-content: center; margin-right: 60px;">
+    Update Food
+</h4>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <link href="~/content/font-awesome.css" rel="stylesheet" />
+    <link href="~/content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/stylesheet.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ResturanShemronKabab.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <link href="~/css/sweetalert2.min.css" rel="stylesheet" />
+    <script src="~/validation/validation.js"></script>
+</head>
+<body>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <h1 style="color:red; display: flex; justify-content: center;">
+            @TempData["ErrorMessage"]
+        </h1>
+    }
+
+    <div class="row" style="display: flex; justify-content: center;">
+        <div class="col-md-4" style="box-shadow: 1px 11px 10px 10px rgba(6, 8, 10, 0.05);">
+            <form asp-action="Add" asp-controller="AppetizerManagement" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label for="CategoryID">Category</label>
+                    <select asp-items="categoryDropDown" class="form-control" asp-for="CategoryID"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AppetizerName" class="control-label"></label>
+                    <input asp-for="AppetizerName" class="form-control" type="text" placeholder="Appetizer Name" id="Name" data-Err-Name="spnErrName" data-msg="Enter your Appetizer Name correctly" oninput="ValidationName(this)" />
+                    <span class="text-danger" id="spnErrName"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UnitPrice" class="control-label"></label>
+                    <input asp-for="UnitPrice" class="form-control" type="text" placeholder="UnitPrice" id="UnitPrice" data-Err-UnitPrice="spnErrUnitPrice" data-msg="Enter your UnitPrice correctly" oninput="ValidationUnitPrice(this)" />
+                    <span class="text-danger" id="spnErrUnitPrice"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SmallDescription" class="control-label"></label>
+                    <input asp-for="SmallDescription" class="form-control" type="text" placeholder="Small Description" id="SmallDescription" data-Err-SmallDescription="spnErrSmallDescription" data-msg="Enter your Small Description correctly" oninput="ValidationSmallDescription(this)" />
+                    <span class="text-danger" id="spnErrSmallDescription"></span>
+                </div>
+                <div class="form-group">
+                    <span>Picture</span>
+                    <input type="file" name="Picture" id="Picture" value="" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

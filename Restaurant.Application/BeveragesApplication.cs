@@ -111,5 +111,10 @@ namespace Restaurant.Application
 		{
             return BeveragesRepo.GetAllListItemInUI();
 		}
+
+		public void RemoveImage(int ID)
+		{
+            BeveragesRepo.RemoveImage(ID);
+		}
 	}
 }

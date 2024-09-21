@@ -1,4 +1,5 @@
 ﻿using FrameWork.DTOS;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Restaurant.ApplicationServiceContract.Services;
 using Restaurant.DataAccessServiceContract.Repositories;
 using Restaurant.DomainModel.ApplicationModel.Category;
@@ -67,12 +68,12 @@ namespace Restaurant.Application
 			}
 			if (food.CategoryID < 0)
 			{
-				return new OperationResult("Register Appetizer").ToFail("Duplicate Category Name");
+				return new OperationResult("Register Food").ToFail("Duplicate Category Name");
 			}
-			if (food.ImageURL.Length < 2048 || food.ImageURL.Length > 2097152)
-			{
-				return new OperationResult("Register Food").ToFail("The size of the photo is large");
-			}
+            if(string.IsNullOrEmpty(food.ImageURL) || food.ImageURL.ToLower() == @"~/images/noimage.png")
+            {
+                return new OperationResult("Register Food").ToFail("Please select the food");
+            }
 			Food f = ToModel(food);
             var OperationFood = FoodRepo.Register(f);
             return OperationFood;

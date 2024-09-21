@@ -33,9 +33,6 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="EmployeeManagement" asp-action="Index">Employee</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="CustomerManagement" asp-action="Index">Customer</a>
-						</li>
-						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="FoodManagement" asp-action="Index">Food</a>
 						</li>
 						<li class="nav-item">
@@ -173,23 +170,56 @@
 				}
 			});
 
-			//Delete Image
-			function DeleteImage(FoodID) {
-				debugger;
-				$.post("/FoodManagement/DeleteImage", { foodID: FoodID }, function (op) {
-					if (op.success) {
-						let action = "List";
-						let controller = "FoodManagement";
-						let sendingUrl = `/${controller}/${action}`;
 
-						$.get(sendingUrl, null, function (receivingData) {
-							$("#dvContent").html(receivingData);
-						});
-					} else {
-						alert(op.message);
+			// // //Delete Image
+			// function DeleteImage(FoodID) {
+			// 	debugger;
+			// 	$.post("/FoodManagement/DeleteImage", { foodID: FoodID }, function (op) {
+			// 		if (op.success) {
+			// 			let action = "List";
+			// 			let controller = "FoodManagement";
+			// 			let sendingUrl = `/${controller}/${action}`;
+
+			// 			$.get(sendingUrl, null, function (receivingData) {
+			// 				$("#dvContent").html(receivingData);
+			// 			});
+			// 		} else {
+			// 			alert(op.message);
+			// 		}
+			// 	});
+			// }
+
+			function DeleteItem(itemID, controller, action, paramName = 'itemID', deleteMethod = 'DeleteImage') {
+				debugger;
+				let data = {};
+				data[paramName] = itemID;
+
+				$.ajax({
+					url: `/${controller}/${deleteMethod}`,
+					type: 'POST',
+					data: data,
+					success: function (op) {
+						if (op.success) {
+							let sendingUrl = `/${controller}/${action}`;
+							$.get(sendingUrl, null, function (receivingData) {
+								$("#dvContent").html(receivingData);
+								BindGrid();
+								SuccessMessage(operationResult.message);
+							});
+						} else {
+							// alert(op.message);
+							ErrorMessage(operationResult.message);
+						}
+					},
+					error: function (xhr, status, error) {
+						console.error('Error:', error);
+						alert('An error occurred while processing your request.');
 					}
 				});
 			}
+
+
+
 
 
 
@@ -264,6 +294,7 @@
 					}
 				});
 			});
+
 
 		</script>
 

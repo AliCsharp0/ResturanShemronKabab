@@ -1,6 +1,8 @@
 ﻿using FrameWork;
+using FrameWork.DTOS;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Restaurant.Application;
 using Restaurant.ApplicationServiceContract.Services;
@@ -13,17 +15,17 @@ using ResturanShemronKabab.ViewModel;
 
 namespace ResturanShemronKabab.Controllers
 {
-    public class BeveragesManagementController : Controller
-    {
-        private readonly IBeveragesApplication beveragesApplication;
-        private readonly ICategoryApplication categoryApplication;
-        private readonly IHostEnvironment env;
-        public BeveragesManagementController(IBeveragesApplication beveragesApplication , ICategoryApplication categoryApplication, IHostEnvironment env)
-        {
-            this.categoryApplication = categoryApplication;
-            this.beveragesApplication = beveragesApplication;
-            this.env= env; 
-        }
+	public class BeveragesManagementController : Controller
+	{
+		private readonly IBeveragesApplication beveragesApplication;
+		private readonly ICategoryApplication categoryApplication;
+		private readonly IHostEnvironment env;
+		public BeveragesManagementController(IBeveragesApplication beveragesApplication, ICategoryApplication categoryApplication, IHostEnvironment env)
+		{
+			this.categoryApplication = categoryApplication;
+			this.beveragesApplication = beveragesApplication;
+			this.env = env;
+		}
 
 		private void InflateCategoryDrp()
 		{
@@ -34,16 +36,16 @@ namespace ResturanShemronKabab.Controllers
 		}
 
 		public IActionResult Index(BeveragesSearchModel sm)
-        {
-            InflateCategoryDrp();
-            return View(sm);
-        }
+		{
+			InflateCategoryDrp();
+			return View(sm);
+		}
 
-        public IActionResult List()
-        {
-            var beverages = beveragesApplication.GetAllListItem();
-            return View(beverages);
-        }
+		public IActionResult List()
+		{
+			var beverages = beveragesApplication.GetAllListItem();
+			return View(beverages);
+		}
 
 		public IActionResult ListUI()
 		{
@@ -52,34 +54,46 @@ namespace ResturanShemronKabab.Controllers
 		}
 
 		public IActionResult Add()
-        {
-            InflateCategoryDrp();
-            return View();
-        }
-        [HttpPost]
-        public JsonResult Add(BeveragesAddEditViewModel model)
-        {
+		{
+			InflateCategoryDrp();
+			return View();
+		}
+		[HttpPost]
+		public IActionResult Add(BeveragesAddEditViewModel model)
+		{
+            if (model.Picture == null)
+            {
+                InflateCategoryDrp();
+                TempData["ErrorMessage"] = "Please select the food";
+                return View(model);
+            }
             string PhisycalAddress = Path.GetFileName(model.Picture.FileName).ToUniqueFileName();
-            string Relativeaddress = @"~/Images/" + PhisycalAddress;
-            PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
-            FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+			string Relativeaddress = @"~/Images/" + PhisycalAddress;
+			PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
+			FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+			{
+				model.Picture.CopyTo(fs);
+			};
+			BeveragesAddAndEditModel beveragesAddAndEditModel = new BeveragesAddAndEditModel
+			{
+				ImageURL = Relativeaddress,
+				UnitPrice = model.UnitPrice,
+				BeveragesID = model.BeveragesID,
+				BeveragesName = model.BeveragesName,
+				CategoryID = model.CategoryID,
+			};
+			var op = beveragesApplication.Register(beveragesAddAndEditModel);
+            if (!op.Success)
             {
-                model.Picture.CopyTo(fs);
-            };
-            BeveragesAddAndEditModel beveragesAddAndEditModel = new BeveragesAddAndEditModel
-            {
-                ImageURL = Relativeaddress,
-                UnitPrice = model.UnitPrice,
-                BeveragesID = model.BeveragesID,
-                BeveragesName = model.BeveragesName,
-                CategoryID = model.CategoryID,
-            };
-            var op = beveragesApplication.Register(beveragesAddAndEditModel);
-            return Json(op);
+                InflateCategoryDrp();
+                TempData["ErrorMessage"] = op.Message;
+                return View(model);
+            }
+            return RedirectToAction("index");
         }
 
 
-        [HttpPost]
+		[HttpPost]
 		public JsonResult Remove(int id)
 		{
 			//var beverages = beveragesApplication.Get(id);
@@ -156,11 +170,10 @@ namespace ResturanShemronKabab.Controllers
 				string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
 				string Relativeaddress = @"~/Images/" + PhisycalAddress;
 				PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
-				FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+				using (FileStream fs = new FileStream(PhisycalAddress, FileMode.Create))
 				{
-					model.Picture.CopyToAsync(fs);
-					fs.Close();
-				};
+					model.Picture.CopyTo(fs);
+				}
 				BeveragesAddAndEditModel n = new BeveragesAddAndEditModel
 				{
 					BeveragesID = model.BeveragesID,
@@ -194,11 +207,33 @@ namespace ResturanShemronKabab.Controllers
 		}
 
 		public IActionResult Search(BeveragesSearchModel sm)
-        {
-            var beverages = beveragesApplication.Search(sm , out int recordCount);
-            return PartialView("List", beverages);
-        }
+		{
+			var beverages = beveragesApplication.Search(sm, out int recordCount);
+			return PartialView("List", beverages);
+		}
 
-
-    }
+		[HttpPost]
+		public JsonResult RemoveImage(int beveragesID)
+		{
+			var oldBeverages = beveragesApplication.Get(beveragesID);
+			if (oldBeverages == null && !string.IsNullOrEmpty(oldBeverages.ImageURL) && oldBeverages.ImageURL != @"~/images/noimage.png")
+			{
+				var url = Path.Combine(env.ContentRootPath, "wwwroot", oldBeverages.ImageURL.Substring(1).Replace("/", "\\"));
+				if (System.IO.File.Exists(url))
+				{
+					System.IO.File.Delete(url);
+				}
+			}
+			OperationResult op = new OperationResult("Delete Image ");
+			try
+			{
+				beveragesApplication.RemoveImage(beveragesID);
+				return Json(op.ToSuccess("Delete Image Success Fully"));
+			}
+			catch(Exception ex)
+			{
+				return Json(op.ToFail("Delete Image Failed " + ex.Message));
+			}
+		}
+	}
 }

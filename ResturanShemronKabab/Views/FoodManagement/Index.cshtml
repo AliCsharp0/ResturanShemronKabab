@@ -37,7 +37,10 @@
 	</table>
 </form>
 
-<span class="btn btn-success btn-add" data-controller="FoodManagement" data-action="Add">Add New</span>
-
+<div class="row">
+	<div class="col-md-12">
+		<a asp-action="Add" asp-controller="FoodManagement" class="btn btn-primary">Add New Food</a>
+	</div>
+</div>
 <div id="dvContent" data-controller="FoodManagement" data-action="List" data-search-form="frmSearch"></div>
 

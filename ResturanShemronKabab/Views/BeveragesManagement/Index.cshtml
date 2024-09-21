@@ -2,7 +2,7 @@
 @{
 	SelectList categoryDropDown = (SelectList)ViewBag.categoryDropDown;
 }
-<form asp-controller="FoodManagement" asp-action="Index" method="get" id="frmSearch">
+<form asp-controller="BeveragesManagement" asp-action="Index" method="get" id="frmSearch">
 	<table class="table table-hover table-striped table-sm">
 		<tr>
 			<td>
@@ -37,7 +37,9 @@
 	</table>
 </form>
 
-<span class="btn btn-success btn-add" data-controller="BeveragesManagement" data-action="Add">Add New</span>
+<div class="col-md-12">
+	<a asp-action="Add" asp-controller="BeveragesManagement" class="btn btn-primary">Add New Food</a>
+</div>
 
 
 <div id="dvContent" data-controller="BeveragesManagement" data-action="List" data-search-form="frmSearch"></div>

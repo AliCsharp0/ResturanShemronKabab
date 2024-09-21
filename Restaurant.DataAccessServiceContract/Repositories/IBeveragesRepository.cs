@@ -23,5 +23,7 @@ namespace Restaurant.DataAccessServiceContract.Repositories
         bool ExistNameInUpdate(int ID, string Name);
 
         bool ExistImageInUpdate(int ID, string Image);
+
+        void RemoveImage(int ID);
     }
 }

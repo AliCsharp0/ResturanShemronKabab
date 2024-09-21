@@ -1,4 +1,5 @@
 ﻿using FrameWork;
+using FrameWork.DTOS;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.FlowAnalysis;
@@ -10,6 +11,7 @@ using Restaurant.DomainModel.ApplicationModel.Appetizer;
 using Restaurant.DomainModel.ApplicationModel.Category;
 using Restaurant.DomainModel.ApplicationModel.Food;
 using ResturanShemronKabab.ViewModel;
+using System.Security.Policy;
 
 namespace ResturanShemronKabab.Controllers
 {
@@ -60,8 +62,14 @@ namespace ResturanShemronKabab.Controllers
 			return View();
 		}
         [HttpPost]
-        public JsonResult Add(AppetizerAddEditViewModel model)
+        public IActionResult Add(AppetizerAddEditViewModel model)
         {
+            if (model.Picture == null)
+            {
+                InflateCategoryDrp();
+                TempData["ErrorMessage"] = "Please select the food";
+                return View(model);
+            }
             string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
             string Relativeaddress = @"~/Images/" + PhisycalAddress;
             PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
@@ -80,7 +88,13 @@ namespace ResturanShemronKabab.Controllers
                
             };
             var op = appetizerApplication.Register(appetizerAddAndEditModel);
-            return Json(op);
+            if (!op.Success)
+            {
+                InflateCategoryDrp();
+                TempData["ErrorMessage"] = op.Message;
+                return View(model);
+            }
+            return RedirectToAction("index");
         }
 
         [HttpPost]
@@ -169,11 +183,10 @@ namespace ResturanShemronKabab.Controllers
 				string PhisycalAddress = Path.GetFileName(model.Picture.FileName);
 				string Relativeaddress = @"~/Images/" + PhisycalAddress;
 				PhisycalAddress = env.ContentRootPath + @"\wwwroot\Images\" + PhisycalAddress;
-				FileStream fs = new FileStream(PhisycalAddress, FileMode.Create);
+				using (FileStream fs = new FileStream(PhisycalAddress, FileMode.Create))
 				{
-					model.Picture.CopyToAsync(fs);
-					fs.Close();
-				};
+					model.Picture.CopyTo(fs);
+				}
 				AppetizerAddAndEditModel n = new AppetizerAddAndEditModel
 				{
 					AppetizerName = model.AppetizerName,
@@ -205,6 +218,30 @@ namespace ResturanShemronKabab.Controllers
 					return View(appetizer);
 				}
 
+			}
+		}
+
+		[HttpPost]
+		public JsonResult DeleteImage(int appetizerID)
+		{
+			var n = appetizerApplication.Get(appetizerID);
+			if (n != null && !string.IsNullOrEmpty(n.ImageURL) && n.ImageURL.ToLower() != @"~/images/noimage.png")
+			{
+				var url = Path.Combine(env.ContentRootPath, "wwwroot", n.ImageURL.Substring(1).Replace("/", "\\"));
+				if (System.IO.File.Exists(url))
+				{
+					System.IO.File.Delete(url);
+				}
+			}
+			OperationResult op = new OperationResult("Delete Image ");
+			try
+			{
+				appetizerApplication.RemoveImage(appetizerID);
+				return Json(op.ToSuccess("Delete Image Success Fully"));
+			}
+			catch (Exception ex)
+			{
+				return Json(op.ToFail("Image did not Removed"));
 			}
 		}
 	}

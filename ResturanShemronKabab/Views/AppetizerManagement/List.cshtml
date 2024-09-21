@@ -10,6 +10,7 @@
 			<th>Category Name</th>
 			<th>Unit Price</th>
 			<th>Image</th>
+			<th>Delete Image</th>
 			<th>Delete</th>
 			<th>Update</th>
 		</tr>
@@ -30,8 +31,14 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.UnitPrice)
 				</td>
+				<td style="display: flex; justify-content: center;">
+					<img  src='@Url.Content(@item.Image)' width="100" />
+				</td>
+			@* 	<td>
+					<span class="btn btn-warning btn-sm" onclick="DeleteImage('@item.AppetizerID')">Delete Image</span>
+				</td> *@
 				<td>
-					@Html.DisplayFor(modelItem => item.Image)
+					<span class="btn btn-warning btn-sm" onclick="DeleteItem('@item.AppetizerID', 'AppetizerManagement', 'List', 'appetizerID', 'DeleteImage')">Delete Image</span>
 				</td>
 				<td>
 					<span class="btn btn-danger btn-sm btn-Remove" data-controller="AppetizerManagement" data-action="Remove" data-id="@item.AppetizerID">Delete</span>
